@@ -5,7 +5,9 @@
 set $mod Mod4
 set $alt Mod1
 
-set $terminal --no-startup-id terminal
+# To use urxvt as default terminal, uncomment next line
+# set $terminal --no-startup-id terminal
+set $terminal --no-startup-id gnome-terminal
 
 # Configure border style <normal|1pixel|pixel xx|none|pixel>
 new_window pixel 2
@@ -300,39 +302,6 @@ set_from_resource $cyan		color14
 set_from_resource $darkwhite	color7
 set_from_resource $white	color15
 set $transparent		#000000
-
-set $height 24
-
-# Start i3bar to display a workspace bar (plus the system information i3status if available)
-#bar {
-#	i3bar_command i3bar
-#	status_command i3status
-#	position top
-#	#font pango:Hack, FontAwesome 8
-#	strip_workspace_numbers yes
-## please set your primary output first. Example: 'xrandr --output eDP1 --primary'
-#	tray_output primary
-#	tray_output eDP1
-#	tray_padding 0
-#	height $height
-#	bindsym button4 nop
-#	bindsym button5 nop
-#	colors {
-#		statusline         $white
-#		background         $transparent
-#		separator          $transparent
-
-#				   BORDER       BACKGROUND   TEXT
-#		focused_workspace  $transparent $transparent $darkwhite
-#		inactive_workspace $transparent $transparent $white
-#		active_workspace   $transparent $transparent $white
-#		urgent_workspace   $darkred     $darkred     $transparent
-#		binding_mode       $darkred     $darkred     $transparent
-#	}
-#}
-
-# hide/unhide i3status bar
-#bindsym $mod+m bar mode toggle
 
 # Theme colors
 #                       BORDER		BACKGROUND	TEXT		INDICATOR   		CHILD_BORDER

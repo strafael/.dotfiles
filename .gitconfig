@@ -1,1 +1,91 @@
-dotfiles/git/.gitconfig
+[user]
+	name = Rafael Santos
+	email = rafael@aurearobotics.com
+
+[core]
+	editor = /usr/bin/nvim
+
+[rebase]
+	autosquash = true
+
+[alias]
+	#
+	# Lazy versions of basic commands
+	#
+	a = add
+	b = branch
+	c = commit -v
+	ca = commit --amend
+	cm = commit --message
+	co = checkout
+	d = diff HEAD
+	e = config --global -e
+	f = commit --fixup
+	ku = !git pull --rebase $@ && git submodule update --init --recursive
+	m = merge --no-ff
+	ma = merge --abort
+	mc = merge --continue
+	p = pull
+	pr = pull --rebase
+	r = rebase
+	ra = rebase --abort
+	rc = rebase --continue
+	s = status
+	st = stash
+	sta = stash apply
+	std = stash drop
+	stl = stash list
+	stp = stash pop
+
+
+	#
+	# Better versions of basic commands
+	#
+	
+	branches = branch --all --create-reflog -vv
+
+	# A more readable log
+	l = log --graph --oneline --decorate --all
+	
+	# Same as above, with files changed in each commit
+	ls = log --graph --oneline --decorate --all --numstat
+
+
+	#
+	# Sugar
+	#
+	
+	# Unstage a staged change
+	unstage = reset HEAD --
+
+	# Pop your last commit out of the history! No change lost, just
+	# unindexed
+	pop = reset HEAD^
+
+	# Takes all changes and commit them with a "WIP" commit message. If
+	# the last commit message already was "WIP", amend this commit instead.
+	wip = ![[ "$(git log -1 --pretty=%B)" = "WIP" ]] && git commit --amend --no-edit || git commit -m "WIP"
+	 
+	# Undo the last commit if it's commit message was "WIP", else it does
+	# nothing.
+	unwip = ![[ "$(git log -1 --pretty=%B)" = "WIP" ]] && git pop || echo "No work in progress"
+
+	# Ignore files only locally
+	hide = update-index --assume-unchanged
+	unhide = update-index --no-assume-unchanged
+	
+	# Cleaning up your topic branch 
+	done = "!f() { count=$(git rev-list --count origin/master..HEAD) && git rebase -i HEAD~$count origin/master; }; f"
+
+	# Commit all with message "update". Useful for dotfile projects
+	update = !git a . && git cm update
+	
+	# Deletes orphaned remote branches (.git/refs/remotes/origin)
+	# clean up reflog
+	# TODO: cleanupbranches = 
+	
+	# Switches to master (though you can specify a different default branch)
+	# Runs git ku to bring master up to speed with the origin
+	# Deletes all branches already merged into master using another alias, git cleanupbranches
+	# TODO: done = "!f() { git checkout {$1-master} && git ku && git cleanupbranches; }; f"
+
