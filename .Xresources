@@ -1,0 +1,77 @@
+Xft.dpi:       96
+Xft.antialias: true
+Xft.hinting:   true
+Xft.rgba:      rgb
+Xft.autohint:  false
+Xft.hintstyle: hintslight
+Xft.lcdfilter: lcddefault
+
+# Dracula modified blue
+*.foreground: #F8F8F2
+*.background: #282A36
+*.color0:     #000000
+*.color8:     #4D4D4D
+*.color1:     #FF5555
+*.color9:     #FF6E67
+*.color2:     #50FA7B
+*.color10:    #5AF78E
+*.color3:     #F1FA8C
+*.color11:    #F4F99D
+*.color4:     #5F819D
+*.color12:    #81A2BE
+*.color5:     #FF79C6
+*.color13:    #FF92D0
+*.color6:     #8BE9FD
+*.color14:    #9AEDFE
+*.color7:     #BFBFBF
+*.color15:    #E6E6E6
+
+*fading:                          8
+*fadeColor:                       black
+*cursorColor:                     #1ABB9B
+*pointerColorBackground:          #2B2C2B
+*pointerColorForeground:          #16A085
+
+Xcursor.theme: xcursor-breeze
+Xcursor.size:                     0
+
+URxvt.font:                       xft:DejaVuSansMono:size=10
+URxvt.depth:                      32
+URxvt*scrollBar:                  false
+URxvt*mouseWheelScrollPage:       false
+URxvt*cursorBlink:                false
+URxvt*background:                 [70]#000000
+URxvt*saveLines:                  5000
+
+! Normal copy-paste keybindings without perls
+URxvt.iso14755:                   false
+URxvt.keysym.Shift-Control-V:     eval:paste_clipboard
+URxvt.keysym.Shift-Control-C:     eval:selection_to_clipboard
+
+!Xterm escape codes, word by word movement
+URxvt.keysym.Control-Left:        \033[1;5D
+URxvt.keysym.Shift-Control-Left:  \033[1;6D
+URxvt.keysym.Control-Right:       \033[1;5C
+URxvt.keysym.Shift-Control-Right: \033[1;6C
+
+! Extensions
+URxvt.perl-ext-common:            default,matcher,resize-font,url-select,keyboard-select,selection-to-clipboard
+URxvt.colorUL:                    #4682B4
+
+!! url-select
+URxvt.keysym.M-u:                 perl:url-select:select_next
+URxvt.url-select.launcher:        /usr/bin/xdg-open
+URxvt.url-select.underline:       true
+
+!! keyboard-select
+URxvt.keysym.M-Escape:            perl:keyboard-select:activate
+
+!! resize-font
+URxvt.resize-font.step:           1
+URxvt.resize-font.smaller:        C-Down
+URxvt.resize-font.bigger:         C-Up
+
+!! clipboard
+URxvt.keysym.Control-Shift-V:     perl:pasta:paste
+URxvt.clipboard.autocopy: true
+
