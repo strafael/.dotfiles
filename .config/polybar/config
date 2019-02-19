@@ -29,7 +29,10 @@ padding-right = 4
 module-margin-left = 3
 module-margin-right = 3
 
-font-0 = "Anka/Coder:style=Regular:size=10:antialias=true;1"
+font-0 = "Lucida Grande:style=Regular:size=10:antialias=true;1"
+font-1 = "Font Awesome 5 Free:style=Solid:pixelsize=12;3"
+font-2 = "Font Awesome 5 Free:style=Regular:pixelsize=12;3"
+font-3 = "Font Awesome 5 Brands:pixelsize=12;3"
 
 modules-left = i3 xwindow
 modules-center = date
@@ -74,17 +77,17 @@ wrapping-scroll = true
 strip-wsnumbers = true
 
 label-mode = %mode%
-label-mode-padding = 4
+label-mode-padding=3
 label-mode-foreground = ${colors.foreground}
 label-mode-background = ${colors.primary}
 
 label-focused = %name%
 label-focused-background = ${colors.background-alt}
 label-focused-underline = ${colors.primary}
-label-focused-padding = 4
+label-focused-padding = 3
 
 label-unfocused = %name%
-label-unfocused-padding = 4
+label-unfocused-padding=3
 
 label-visible = V %index%
 label-visible-background = ${self.label-focused-background}
@@ -93,7 +96,7 @@ label-visible-padding = ${self.label-focused-padding}
 
 label-urgent = 
 label-urgent-background = ${colors.alert}
-label-urgent-padding = 4
+label-urgent-padding=3
 
 [module/cpu]
 type = internal/cpu
