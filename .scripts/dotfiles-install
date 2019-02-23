@@ -1,27 +1,30 @@
 #!/bin/bash
 
-GIT_DIR=$HOME/.dotfiles2
+GIT_DIR=$HOME/.dotfiles
+BACKUP_DIR=$HOME/.dotfiles-backup
 
-git clone --bare git@github.com:rtogo/.dotfiles.git $GIT_DIR
 function config {
    git --git-dir=$GIT_DIR --work-tree=$HOME $@
 }
-config checkout
+
+git clone --bare git@github.com:rtogo/.dotfiles.git $GIT_DIR >/dev/null 2>&1
+config checkout >/dev/null 2>&1
 if [ $? = 0 ]; then
-	echo "Checked out config.";
+	echo "Checked out dotfiles";
 else
 	echo "Backing up pre-existing dotfiles...";
-	mkdir -p .dotfiles-backup
+	mkdir -p $BACKUP_DIR
 	pre_existing_files=($(config checkout 2>&1 | egrep "^\s+" | awk {'print $1'}))
 	for fullpath in "${pre_existing_files[@]}"
 	do
-		echo $fullpath
 		dirname=$(dirname $fullpath)
 		if [[ $dirname != "." ]]; then
-			mkdir -p ".dotfiles-backup/$dirname"
+			mkdir -p "$BACKUP_DIR/$dirname"
 		fi;
-		mv $fullpath .dotfiles-backup/$fullpath
+		mv "$fullpath" "$BACKUP_DIR/$fullpath"
+		echo "$fullpath backed up into --> $BACKUP_DIR/$fullpath"
 	done
 	config checkout
 fi;
 config config status.showUntrackedFiles no
+
