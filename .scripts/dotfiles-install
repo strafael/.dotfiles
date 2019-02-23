@@ -12,7 +12,16 @@ if [ $? = 0 ]; then
 else
 	echo "Backing up pre-existing dotfiles...";
 	mkdir -p .dotfiles-backup
-	config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .dotfiles-backup/{}
+	pre_existing_files=($(config checkout 2>&1 | egrep "^\s+" | awk {'print $1'}))
+	for fullpath in "${pre_existing_files[@]}"
+	do
+		dirname=$(dirname $fullpath)
+		if [[ $dirname = "." ]]; then
+			continue
+		fi;
+		mkdir -p ".dotfiles-backup/$dirname"
+		mv $fullpath ".dotfiles-backup/$dirname"
+	done
 	config checkout
 fi;
 config config status.showUntrackedFiles no
