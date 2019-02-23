@@ -7,7 +7,7 @@ function config {
    git --git-dir=$GIT_DIR --work-tree=$HOME $@
 }
 
-git clone --bare git@github.com:rtogo/.dotfiles.git $GIT_DIR >/dev/null 2>&1
+git clone --bare git@github.com:rtogo/.dotfiles.git $GIT_DIR
 config checkout
 if [ $? = 0 ]; then
 	echo "Checked out dotfiles";
@@ -25,6 +25,7 @@ else
 		echo "$fullpath backed up into --> $BACKUP_DIR/$fullpath"
 	done
 	config checkout
+	echo "Checked out dotfiles";
 fi;
 config config status.showUntrackedFiles no
 
