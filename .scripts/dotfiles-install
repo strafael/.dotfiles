@@ -15,12 +15,12 @@ else
 	pre_existing_files=($(config checkout 2>&1 | egrep "^\s+" | awk {'print $1'}))
 	for fullpath in "${pre_existing_files[@]}"
 	do
+		echo $fullpath
 		dirname=$(dirname $fullpath)
-		if [[ $dirname = "." ]]; then
-			continue
+		if [[ $dirname != "." ]]; then
+			mkdir -p ".dotfiles-backup/$dirname"
 		fi;
-		mkdir -p ".dotfiles-backup/$dirname"
-		mv $fullpath ".dotfiles-backup/$dirname"
+		mv $fullpath .dotfiles-backup/$fullpath
 	done
 	config checkout
 fi;
