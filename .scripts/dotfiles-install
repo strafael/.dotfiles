@@ -15,17 +15,20 @@ else
 	echo "Backing up pre-existing dotfiles...";
 	mkdir -p $BACKUP_DIR
 	pre_existing_files=($(config checkout 2>&1 | egrep "^\s+" | awk {'print $1'}))
-	for fullpath in "${pre_existing_files[@]}"
+	for pre_existing_file in "${pre_existing_files[@]}"
 	do
-		dirname=$(dirname $fullpath)
+		dirname=$(dirname $pre_existing_file )
 		if [[ $dirname != "." ]]; then
 			mkdir -p "$BACKUP_DIR/$dirname"
 		fi;
-		mv "$fullpath" "$BACKUP_DIR/$fullpath"
-		echo "$fullpath backed up into --> $BACKUP_DIR/$fullpath"
+
+		mv "$pre_existing_file" "$BACKUP_DIR/$pre_existing_file"
+		echo "$pre_existing_file backed up into --> $BACKUP_DIR/$pre_existing_file"
 	done
+
 	config checkout
 	echo "Checked out dotfiles";
 fi;
+
 config config status.showUntrackedFiles no
 
