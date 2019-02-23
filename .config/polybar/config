@@ -12,37 +12,33 @@ bottom = false
 width = 100%
 height = 30
 radius = 0.0
-
+offset-y = 0
+offset-x = 0
+border-size = 0
+border-color = #00000000
+wm-restack = none
+override-redirect = false
 background = ${colors.background}
 foreground = ${colors.foreground}
-
 line-size = 3
 line-color = #f00
 
-border-size = 0
-border-color = #00000000
+font-0 = "Iosevka:style=Regular:size=10:antialias=true;2"
+font-1 = "Font Awesome 5 Free:style=Regular:pixelsize=10;2"
+font-2 = "Font Awesome 5 Free:style=Solid:pixelsize=10;2"
+font-3 = "Font Awesome 5 Brands:pixelsize=10;2"
 
 fixed-center = true
 padding-left = 2
 padding-right = 2
 module-margin = 1.5
 
-
-font-0 = "Iosevka:style=Regular:size=10:antialias=true;3"
-font-1 = "Font Awesome 5 Free:style=Solid:pixelsize=12;3"
-font-2 = "Font Awesome 5 Free:style=Regular:pixelsize=12;3"
-font-3 = "Font Awesome 5 Brands:pixelsize=12;3"
-
-
 modules-left = i3 xwindow
 modules-center = date
-modules-right = xkeyboard pulseaudio network memory cpu temperature powermenu
+modules-right = xkeyboard pulseaudio network memory cpu cpu-loadavg temperature powermenu
 
 tray-position = right
 tray-padding = 2
-
-wm-restack = none
-override-redirect = false
 
 scroll-up = i3wm-wsprev
 scroll-down = i3wm-wsnext
@@ -76,17 +72,18 @@ wrapping-scroll = true
 strip-wsnumbers = true
 
 label-mode = %mode%
-label-mode-padding=3
+label-mode-padding=2
 label-mode-foreground = ${colors.foreground}
 label-mode-background = ${colors.primary}
 
 label-focused = %name%
 label-focused-background = ${colors.background-alt}
 label-focused-underline = ${colors.primary}
-label-focused-padding = 3
+label-focused-padding = 2
 
 label-unfocused = %name%
-label-unfocused-padding=3
+label-unfocused-foreground = #afafaf
+label-unfocused-padding = 2
 
 label-visible = V %index%
 label-visible-background = ${self.label-focused-background}
@@ -95,48 +92,11 @@ label-visible-padding = ${self.label-focused-padding}
 
 label-urgent = 
 label-urgent-background = ${colors.alert}
-label-urgent-padding=3
-
-[module/cpu]
-type = internal/cpu
-interval = 2
-format-prefix = " "
-format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #00000000
-label = %percentage%%
-
-[module/memory]
-type = internal/memory
-interval = 2
-format-prefix = " "
-format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #00000000
-label = %percentage_used%%
-
-[module/network]
-type = internal/network
-interface = wlp5s0
-interval = 3.0
-
-format-connected = <ramp-signal> <label-connected>
-format-connected-underline = #00000000
-label-connected = " %essid%"
-
-format-disconnected = <label-disconnected>
-format-disconnected-underline = ${colors.alert}
-label-disconnected = xx.xx.xx.xx
-label-disconnected-foreground = ${colors.foreground-alt}
-
-ramp-signal-0 = 
-ramp-signal-1 = 
-ramp-signal-2 = 
-ramp-signal-3 = 
-ramp-signal-4 = 
-ramp-signal-foreground = ${colors.foreground-alt}
+label-urgent-padding = 3
 
 [module/date]
 type = internal/date
-interval = 5
+interval = 1
 
 date = %a
 date-alt = " %Y-%m-%d"
@@ -150,26 +110,28 @@ format-underline = #00000000
 
 label = %date% %time%
 
-[module/temperature]
-type = internal/temperature
-thermal-zone = 0
-warn-temperature = 55
-
-format = <ramp> <label>
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = " "
+format-prefix-foreground = #afafaf
 format-underline = #00000000
-format-warn = <ramp> <label-warn>
-format-warn-underline = ${self.format-underline}
+label = %percentage%%
 
-label = %temperature-c%
-label-warn = %temperature-c%
-label-warn-foreground = ${colors.foreground}
-label-warn-background = ${colors.alert}
-label-warn-padding = 2
+[module/cpu-loadavg]
+type = custom/script
+exec = $HOME/.config/polybar/cpu-loadavg
+interval = 5
+#format-prefix = "x "
+#format-prefix-foreground = #afafaf
 
-ramp-0 = 
-ramp-1 = 
-ramp-2 = 
-ramp-foreground = ${colors.foreground-alt}
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = " "
+format-prefix-foreground = #afafaf
+format-underline = #00000000
+label = %percentage_used%%
 
 [module/powermenu]
 type = custom/menu
@@ -198,29 +160,29 @@ menu-2-0-exec = poweroff
 menu-2-1 = cancel
 menu-2-1-exec = menu-open-0
 
-[module/pulseaudio]
-type = internal/pulseaudio
-
-format-volume = <label-volume> <bar-volume>
-label-volume = VOL
-label-volume-foreground = ${colors.foreground}
-
-format-muted-prefix = " "
-format-muted-foreground = ${colors.foreground-alt}
-label-muted = sound muted
-
-bar-volume-width = 16
-bar-volume-foreground-0 = #55aa55
-bar-volume-foreground-1 = #55aa55
-bar-volume-foreground-2 = #55aa55
-bar-volume-foreground-3 = #55aa55
-bar-volume-foreground-4 = #55aa55
-bar-volume-foreground-5 = #f5a70a
-bar-volume-foreground-6 = #ff5555
-bar-volume-gradient = true
-bar-volume-indicator = |
-bar-volume-fill = –
-bar-volume-empty = –
+#[module/pulseaudio]
+#type = internal/pulseaudio
+#
+#format-volume = <label-volume> <bar-volume>
+#label-volume = VOL
+#label-volume-foreground = ${colors.foreground}
+#
+#format-muted-prefix = " "
+#format-muted-foreground = ${colors.foreground-alt}
+#label-muted = sound muted
+#
+#bar-volume-width = 16
+#bar-volume-foreground-0 = #55aa55
+#bar-volume-foreground-1 = #55aa55
+#bar-volume-foreground-2 = #55aa55
+#bar-volume-foreground-3 = #55aa55
+#bar-volume-foreground-4 = #55aa55
+#bar-volume-foreground-5 = #f5a70a
+#bar-volume-foreground-6 = #ff5555
+#bar-volume-gradient = true
+#bar-volume-indicator = |
+#bar-volume-fill = –
+#bar-volume-empty = –
 
 [settings]
 screenchange-reload = true
