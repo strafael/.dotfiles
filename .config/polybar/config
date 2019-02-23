@@ -12,7 +12,6 @@ bottom = false
 width = 100%
 height = 30
 radius = 0.0
-fixed-center = true
 
 background = ${colors.background}
 foreground = ${colors.foreground}
@@ -23,16 +22,17 @@ line-color = #f00
 border-size = 0
 border-color = #00000000
 
-padding-left = 0
-padding-right = 4
+fixed-center = true
+padding-left = 2
+padding-right = 2
+module-margin = 1.5
 
-module-margin-left = 3
-module-margin-right = 3
 
-font-0 = "Lucida Grande:style=Regular:size=10:antialias=true;1"
+font-0 = "Iosevka:style=Regular:size=10:antialias=true;3"
 font-1 = "Font Awesome 5 Free:style=Solid:pixelsize=12;3"
 font-2 = "Font Awesome 5 Free:style=Regular:pixelsize=12;3"
 font-3 = "Font Awesome 5 Brands:pixelsize=12;3"
+
 
 modules-left = i3 xwindow
 modules-center = date
@@ -41,9 +41,8 @@ modules-right = xkeyboard pulseaudio network memory cpu temperature powermenu
 tray-position = right
 tray-padding = 2
 
-wm-restack = i3
-
-;override-redirect = true
+wm-restack = none
+override-redirect = false
 
 scroll-up = i3wm-wsprev
 scroll-down = i3wm-wsnext
