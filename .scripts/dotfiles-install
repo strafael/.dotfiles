@@ -8,7 +8,7 @@ function config {
 }
 
 git clone --bare git@github.com:rtogo/.dotfiles.git $GIT_DIR >/dev/null 2>&1
-config checkout >/dev/null 2>&1
+config checkout
 if [ $? = 0 ]; then
 	echo "Checked out dotfiles";
 else

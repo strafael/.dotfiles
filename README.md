@@ -16,7 +16,13 @@ working with for years.
 
 ## Getting Started
 
+### Prerequisites
 
+### Installing
+
+```bash
+$ curl -sSL https://raw.githubusercontent.com/rtogo/.dotfiles/master/.scripts/dotfiles-install | /bin/bash
+```
 
 ## Acknowledgements
 
