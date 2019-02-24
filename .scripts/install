@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Disable the annoying beeps
+echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf
+
