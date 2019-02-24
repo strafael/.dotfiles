@@ -4,7 +4,7 @@ GIT_DIR=$HOME/.dotfiles
 BACKUP_DIR=$HOME/.dotfiles-backup
 
 function config {
-   git --git-dir=$GIT_DIR --work-tree=$HOME $@
+	git --git-dir=$GIT_DIR --work-tree=$HOME $@
 }
 
 git clone --bare https://github.com/rtogo/.dotfiles.git $GIT_DIR >/dev/null 2>&1
