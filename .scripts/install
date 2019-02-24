@@ -49,6 +49,10 @@ function install {
 
 
 function install_dotfiles {
+	dialog \
+		--title "Instalação" \
+		--infobox "Colocando arquivos de configuração no lugar..." \
+		7 70
 	curl -sSL https://raw.githubusercontent.com/rtogo/.dotfiles/master/.scripts/dotfiles-install | /bin/bash
 }
 
@@ -67,15 +71,15 @@ function show_done_msg {
 # Atualiza o sistema e ao mesmo tempo garante que está rodando como root
 pacman -Syu --noconfirm --needed dialog || error "Este script deve ser executado como root"
 
-#show_welcome_msg
+#show_welcome_msg || error "Abortado."
 
 # Adiciona o usuário ao grupo wheel
 #usermod -a -G wheel $USER
 
-show_pre_install_msg
+show_pre_install_msg || error "Abortado."
 
 # Instala base-devel e git, necessários para instalar o resto dos pacotes
-dialog --title "Instalação" --infobox "Instalando \`base-devel\` e \`git\`..." 5 70
+#dialog --title "Instalação" --infobox "Instalando \`base-devel\` e \`git\`..." 5 70
 #pacman --noconfirm --needed -S base-devel git >/dev/null 2>&1
 
 # Caso o pacman tenha criado um .pacnew...
@@ -94,7 +98,7 @@ echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf
 #pacman --noconfirm --needed -S yay >/dev/null 2>&1
 
 #install_from_package_list
-install_dotfiles
-show_done_msg
+install_dotfiles || error "Abortado."
+show_done_msg || error "Abortado."
 clear
 
