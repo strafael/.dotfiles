@@ -65,7 +65,7 @@ function show_done_msg {
 # ----------------
 
 # Atualiza o sistema e ao mesmo tempo garante que está rodando como root
-#pacman -Syu --noconfirm --needed dialog || error "Este script deve ser executado como root"
+pacman -Syu --noconfirm --needed dialog || error "Este script deve ser executado como root"
 
 #show_welcome_msg
 
