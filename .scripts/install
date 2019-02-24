@@ -1,5 +1,100 @@
 #!/bin/bash
 
+# ---------
+# FUNCTIONS
+# ---------
+
+function error {
+	clear
+	printf "ERROR: %s\\n" "$1"
+	exit
+}
+
+function show_welcome_msg {
+	dialog \
+		--title "Bem-vindo!" \
+		--msgbox "Bem-vindo ao Auto Instalator Script do Rafael!\\n\\nEste script vai instalar e configurar seu desktop Arch Linux com i3wm." \
+		10 60 || { clear; exit; }
+}
+
+
+function show_pre_install_msg {
+	dialog \
+		--title "Aviso" \
+		--yes-label "Vomitão!" \
+		--no-label "Não, obrigado" \
+		--yesno "Este script vai executar a instalação de for totalmente automatizada.\\n\\nVai levar algum tempo, então senta e relaxa.\\n\\nPressione <Vomitão!> para iniciar a instalação." \
+		13 60 || { clear; exit; }
+}
+
+
+function install_from_package_list {
+	curl -sSL https://raw.githubusercontent.com/rtogo/.dotfiles/master/.scripts/package-list | sed '/^#/d' > /tmp/package-list
+	total=$(wc -l < /tmp/package-list)
+	while IFS=, read -r package description; do
+		n=$((n+1))
+		install $package $description
+	done < /tmp/package-list
+
+}
+
+
+function install {
+	dialog \
+		--title "Instalação" \
+		--infobox "Instalando pacote $n de $total...\\n\\n$package: $description" \
+		7 70
+	sudo -u "$USER" yay -S --noconfirm "$1" >/dev/null 2>&1
+}
+
+
+function install_dotfiles {
+	curl -sSL https://raw.githubusercontent.com/rtogo/.dotfiles/master/.scripts/dotfiles-install | /bin/bash
+}
+
+
+function show_done_msg {
+	dialog \
+		--title "Tudo pronto!" \
+		--msgbox "Pronto! Supondo que não deu nenhum erro que foi omitido por estas janelas bonitinhas, o script foi executado com sucesso, todos os pacotes foram instalados, e os arquivos de configuração devem estar em seus lugares.\\n\\nReinice o computador para aplicar as configurações." \
+		9 80
+}
+
+# ----------------
+# INÍCIO DO SCRIPT
+# ----------------
+
+# Atualiza o sistema e ao mesmo tempo garante que está rodando como root
+#pacman -Syu --noconfirm --needed dialog || error "Este script deve ser executado como root"
+
+#show_welcome_msg
+
+# Adiciona o usuário ao grupo wheel
+#usermod -a -G wheel $USER
+
+show_pre_install_msg
+
+# Instala base-devel e git, necessários para instalar o resto dos pacotes
+dialog --title "Instalação" --infobox "Instalando \`base-devel\` e \`git\`..." 5 70
+#pacman --noconfirm --needed -S base-devel git >/dev/null 2>&1
+
+# Caso o pacman tenha criado um .pacnew...
+#[ -f /etc/sudoers.pacnew ] && cp /etc/sudoers.pacnew /etc/sudoers  
+
+# Permite ao usuário executar comandos sudo sem pedir senha
+sed -i 's/^#\s\(%wheel\sALL=(ALL)\s\NOPASSWD:\sALL\)/\1/' /etc/sudoers
+
+# Ativa cores no pacman e yay
+sed -i 's/^#Color/Color/g'
+
 # Disable the annoying beeps
 echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf
+
+# Instala yay como AUR helper
+#pacman --noconfirm --needed -S yay >/dev/null 2>&1
+
+#install_from_package_list
+install_dotfiles
+show_done_msg
+clear
 
