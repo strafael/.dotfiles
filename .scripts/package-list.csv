@@ -1,4 +1,4 @@
-Name,Description
+#Name,Description
 caffeine-ng,"Status bar application able to temporarily inhibit sleep mode"
 deluge,"Torrent downloader"
 docker,"Docker"
