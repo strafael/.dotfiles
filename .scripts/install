@@ -62,6 +62,13 @@ function install {
 }
 
 
+function configure_docker {
+	systemctl start docker
+ 	systemctl enable docker
+ 	usermod -aG docker $username
+}
+
+
 function install_dotfiles {
 	dialog \
 		--title "Instalação" \
@@ -89,7 +96,7 @@ pacman -Syu --noconfirm --needed dialog || error "Este script deve ser executado
 get_username
 
 # Adiciona o usuário ao grupo wheel
-usermod -a -G wheel $username
+usermod -aG wheel $username
 
 show_pre_install_msg || error "Abortado."
 
@@ -113,6 +120,7 @@ echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf
 pacman --noconfirm --needed -S yay >/dev/null 2>&1
 
 install_from_package_list
+configure_docker
 install_dotfiles || error "Abortado."
 show_done_msg || error "Abortado."
 clear
