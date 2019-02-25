@@ -18,6 +18,19 @@ function show_welcome_msg {
 }
 
 
+function get_username {
+	options=$(cat /etc/passwd | grep '/home' | cut -d: -f1)
+	username=$(
+		dialog \
+			--stdout \
+			--no-items \
+			--menu "Selecione o usuário:" \
+			10 30 4 \
+			$options
+	)
+}
+
+
 function show_pre_install_msg {
 	dialog \
 		--title "Aviso" \
@@ -44,7 +57,7 @@ function install {
 		--title "Instalação" \
 		--infobox "Instalando pacote $n de $total...\\n\\n$package: $description" \
 		7 70
-	sudo -u "$USER" yay -S --noconfirm "$1" >/dev/null 2>&1
+	sudo -u "$username" yay -S --noconfirm "$1" >/dev/null 2>&1
 }
 
 
@@ -53,7 +66,7 @@ function install_dotfiles {
 		--title "Instalação" \
 		--infobox "Colocando arquivos de configuração no lugar..." \
 		7 70
-	curl -sSL https://raw.githubusercontent.com/rtogo/.dotfiles/master/.scripts/dotfiles-install | /bin/bash
+	curl -sSL https://raw.githubusercontent.com/rtogo/.dotfiles/master/.scripts/dotfiles-install | sudo -u "$username" /bin/bash >/dev/null 2>&1
 }
 
 
@@ -72,18 +85,19 @@ function show_done_msg {
 pacman -Syu --noconfirm --needed dialog || error "Este script deve ser executado como root"
 
 #show_welcome_msg || error "Abortado."
+get_username
 
 # Adiciona o usuário ao grupo wheel
-#usermod -a -G wheel $USER
+usermod -a -G wheel $username
 
 show_pre_install_msg || error "Abortado."
 
 # Instala base-devel e git, necessários para instalar o resto dos pacotes
-#dialog --title "Instalação" --infobox "Instalando \`base-devel\` e \`git\`..." 5 70
-#pacman --noconfirm --needed -S base-devel git >/dev/null 2>&1
+dialog --title "Instalação" --infobox "Instalando \`base-devel\` e \`git\`..." 5 70
+pacman --noconfirm --needed -S base-devel git >/dev/null 2>&1
 
 # Caso o pacman tenha criado um .pacnew...
-#[ -f /etc/sudoers.pacnew ] && cp /etc/sudoers.pacnew /etc/sudoers  
+[ -f /etc/sudoers.pacnew ] && cp /etc/sudoers.pacnew /etc/sudoers  
 
 # Permite ao usuário executar comandos sudo sem pedir senha
 sed -i 's/^#\s\(%wheel\sALL=(ALL)\s\NOPASSWD:\sALL\)/\1/' /etc/sudoers
@@ -95,9 +109,9 @@ sed -i 's/^#Color/Color/g'
 echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf
 
 # Instala yay como AUR helper
-#pacman --noconfirm --needed -S yay >/dev/null 2>&1
+pacman --noconfirm --needed -S yay >/dev/null 2>&1
 
-#install_from_package_list
+install_from_package_list
 install_dotfiles || error "Abortado."
 show_done_msg || error "Abortado."
 clear
