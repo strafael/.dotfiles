@@ -21,7 +21,7 @@ working with for years.
 ### Installing
 
 ```bash
-$ curl -sSL https://raw.githubusercontent.com/rtogo/.dotfiles/master/.scripts/dotfiles-install | /bin/bash
+$ curl -sSL https://raw.githubusercontent.com/rtogo/.dotfiles/master/.scripts/install | sudo /bin/bash
 ```
 
 ## Acknowledgements
