@@ -48,6 +48,7 @@ function install_from_package_list {
 		n=$((n+1))
 		install $package $description
 	done < /tmp/package-list
+	rm /tmp/package-list
 
 }
 
@@ -103,7 +104,7 @@ pacman --noconfirm --needed -S base-devel git >/dev/null 2>&1
 sed -i 's/^#\s\(%wheel\sALL=(ALL)\s\NOPASSWD:\sALL\)/\1/' /etc/sudoers
 
 # Ativa cores no pacman e yay
-sed -i 's/^#Color/Color/g'
+sed -i 's/^#Color/Color/g' /etc/pacman.conf
 
 # Disable the annoying beeps
 echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf
