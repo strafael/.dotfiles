@@ -1,0 +1,38 @@
+Name,Description
+caffeine-ng,Status bar application able to temporarily inhibit sleep mode
+deluge,Torrent downloader
+docker,Docker
+docker-compose,Docker-compose
+emacs,Emacs editor
+epdfview,PDF documents viewer
+ffmpeg,For recording video and audio from command line
+ffmpegthumbnailer,Used by file managers to create thumbnails for video files
+firefox,Firefox browser
+gcolor2,A color picker
+google-chrome,Google Chrome browser
+gopass,The standard unix password manager - rewritten in Go
+hledger,Double-entry accounting in plain text files
+jre,Java Runtime Environment
+libreoffice-still,LibreOffice stable branch
+lightdm-settings,GUI for configuring lightdm
+meld,File and directory comparison tool
+nemo,File manager
+neovim,Vim fork with sane defaults and better plugin support
+noto-fonts,Beautiful and free fonts for all languages
+otf-font-awesome,Iconic font designed for Bootstrap
+p7zip,For extracting 7-zip and other archives
+playerctl,Media player controller and lib for spotify, vlc, audacious, bmp, xmms2, and others
+redshift,Adjusts the color temperature of your screen
+rofi,A window switcher, application launcher and dmenu replacement
+spotify,Digital music, podcast and video streaming service
+stack,Hasckell build tool
+telegram-desktop-bin,Telegram messenger
+tldr,A collection of simplified and community-driven man pages
+ttf-mac-fonts,Mac fonts including Lucida Grande, Apple Garamond and other fonts from Apple
+ttf-ms-fonts,Core TTF Fonts from Microsoft
+unzip,For extracting .zip archives
+vim,Vim editor
+vlc,Player with native support for multiple codecs
+xclip,Allows for copying and pasting from the command line
+xorg-xbacklight,Enables changing screen brightness levels
+xorg-xrandr,Allows configuration of the X Server (resolution, refresh rates, outputs, etc)
