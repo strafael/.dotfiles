@@ -1,6 +1,14 @@
 [options]
 font = DejaVu Sans Mono Book 11
 cursor_blink = off
+cursor_shape = block
+scroll_on_output = false
+scroll_on_keystroke = true
+scrollback_lines = -1
+mouse_autohide = true
+allow_bold = true
+clickable_url = true
+search_wrap = false
 
 [colors]
 # If both of these are unset, cursor falls back to the foreground color,
@@ -11,11 +19,8 @@ cursor_foreground = #1ABB9B
 foreground = #F8F8F2
 background = #282A36
 
-# 30% background transparency
+# Background transparency
 background = rgba(40, 42, 54, 0.7)
-
-# If unset, will reverse foreground and background
-highlight = #2f2f2f
 
 # Dracula theme
 color0 =     #000000
