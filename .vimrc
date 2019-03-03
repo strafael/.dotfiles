@@ -12,7 +12,6 @@ call plug#begin('~/.vim/plugged')
 " Plugings - Make sure you use single quotes
 " =========================================================
 Plug 'rtogo/dracula-vim', { 'as': 'dracula' }
-Plug 'ctrlpvim/ctrlp.vim'
 Plug 'haya14busa/incsearch.vim'  
 Plug 'scrooloose/nerdtree'
 
@@ -86,11 +85,6 @@ nnoremap <c-w> :q<CR>
 
 " Select all
 nnoremap <c-a> <esc>gg0vG$
-
-" =========================================================
-" ctrlp
-" =========================================================
-let g:ctrlp_regexp = 1
 
 " =========================================================
 " incsearch

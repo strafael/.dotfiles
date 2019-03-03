@@ -64,8 +64,6 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'rtogo/dracula-vim', { 'as': 'dracula' }
 Plug 'haya14busa/incsearch.vim'  
-Plug 'junegunn/fzf.vim'
-Plug '/usr/bin/fzf'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
@@ -150,23 +148,4 @@ let g:airline_powerline_fonts = 1
 
 " Show just the filename
 let g:airline#extensions#tabline#fnamemod = ':t'
-
-
-" =========================================================
-" fzf
-" =========================================================
-" Open Buffers
-nnoremap <leader>; :Buffers<CR>
-
-" Open Files
-nnoremap <leader>o :Files<CR>
-
-" Open Tags
-nnoremap <leader>t :Tags<CR>
-
-
-" =========================================================
-" Workspace
-" =========================================================
-nnoremap <leader>s :ToggleWorkspace<CR>
 
