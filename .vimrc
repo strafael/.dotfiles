@@ -11,9 +11,9 @@ call plug#begin('~/.vim/plugged')
 " =========================================================
 " Plugings - Make sure you use single quotes
 " =========================================================
+Plug 'rtogo/dracula-vim', { 'as': 'dracula' }
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'haya14busa/incsearch.vim'  
-Plug 'joshdick/onedark.vim'
 Plug 'scrooloose/nerdtree'
 
 " Initialize plugin system
@@ -39,7 +39,7 @@ if (empty($TMUX))
 endif
 
 syntax on
-colorscheme onedark
+silent! colorscheme dracula
 
 " =========================================================
 " Settings

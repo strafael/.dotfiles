@@ -9,7 +9,7 @@ set foldmethod=indent               " Lines with equal indent form a fold
 set ignorecase                      " The case of normal letters is ignored
 set mouse=a                         " Enable use of mouse in all modes
 set number                          " Show line numbers
-set numberwidth=5                   " Minimal number of columns to use for the line number
+set numberwidth=4                   " Minimal number of columns to use for the line number
 set relativenumber                  " Show the line number relative to the line with the cursor in front of each line
 set smartcase                       " Override the 'ignorecase' option if the search pattern contains upper case characters
 
@@ -62,21 +62,16 @@ nnoremap <c-g> :Rg<CR>
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'joshdick/onedark.vim'
-Plug '/usr/bin/fzf'
-Plug 'junegunn/fzf.vim'
+Plug 'rtogo/dracula-vim', { 'as': 'dracula' }
 Plug 'haya14busa/incsearch.vim'  
-Plug 'scrooloose/nerdtree'
+Plug 'junegunn/fzf.vim'
+Plug '/usr/bin/fzf'
 Plug 'scrooloose/nerdcommenter'
-Plug 'vim-airline/vim-airline'
+Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
-Plug 'thaerkh/vim-workspace'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
-" If ctags isn't installed you can download it from its homepage
-" http://ctags.sourceforge.net/
-" Plug 'xolox/vim-misc'
-" Plug 'xolox/vim-easytags'
-" Plug 'vim-airline/vim-airline-themes'
 " Plug 'ctrlpvim/ctrlp.vim'
 
 " Initialize plugin system
@@ -84,7 +79,7 @@ call plug#end()
 
 
 " =========================================================
-" onedark
+" True Colors
 " =========================================================
 "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
 "If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
@@ -101,9 +96,14 @@ if (empty($TMUX))
     set termguicolors
   endif
 endif
-
 syntax on
-colorscheme onedark
+
+
+" =========================================================
+" Color Scheme
+" =========================================================
+silent! colorscheme dracula
+let g:airline_theme='minimalist'
 
 
 " =========================================================
