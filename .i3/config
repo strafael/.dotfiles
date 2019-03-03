@@ -7,7 +7,7 @@ set $alt Mod1
 
 # To use urxvt as default terminal, uncomment next line
 # set $terminal --no-startup-id terminal
-set $terminal --no-startup-id gnome-terminal
+set $terminal termite
 
 # Se lock screen command
 set $locker betterlockscreen --lock dim
@@ -32,7 +32,7 @@ font xft:Lucida Grande 11
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec $terminal
+bindsym $mod+Return exec --no-startup-id $terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -48,7 +48,7 @@ bindsym $mod+z exec --no-startup-id morc_menu
 ################################################################################################
 
 exec --no-startup-id volumeicon
-bindsym $mod+Ctrl+m exec $terminal -e 'alsamixer'
+bindsym $mod+Ctrl+m exec --no-startup-id $terminal -e 'alsamixer'
 #exec --no-startup-id pulseaudio
 #exec --no-startup-id pa-applet
 #bindsym $mod+Ctrl+m exec pavucontrol
@@ -66,11 +66,11 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # Start Applications
-bindsym $mod+Ctrl+b exec $terminal -e 'bmenu'
+bindsym $mod+Ctrl+b exec --no-startup-id $terminal -e 'bmenu'
 bindsym $mod+F2 exec firefox
 bindsym $mod+F3 exec pcmanfm
 bindsym $mod+Shift+F3 exec gksu pcmanfm
-bindsym $mod+F5 exec $terminal -e 'mocp'
+bindsym $mod+F5 exec --no-startup-id $terminal -e 'mocp'
 bindsym $mod+t exec --no-startup-id pkill compton
 bindsym $mod+Ctrl+t exec --no-startup-id compton -b
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
@@ -285,28 +285,26 @@ exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
 exec_always --no-startup-id $HOME/.config/polybar/launch
 
-# Color palette used for the terminal ( ~/.Xresources file )
-# Colors are gathered based on the documentation:
-# https://i3wm.org/docs/userguide.html#xresources
-set_from_resource $term_background background
-set_from_resource $term_foreground foreground
-set_from_resource $darkblack	color0
-set_from_resource $black	color8
-set_from_resource $darkred	color1
-set_from_resource $red		color9
-set_from_resource $darkgreen	color2
-set_from_resource $green	color10
-set_from_resource $darkyellow	color3
-set_from_resource $yellow	color11
-set_from_resource $darkblue	color4
-set_from_resource $blue		color12
-set_from_resource $darkmagenta	color5
-set_from_resource $magenta	color13
-set_from_resource $darkcyan	color6
-set_from_resource $cyan		color14
-set_from_resource $darkwhite	color7
-set_from_resource $white	color15
-set $transparent		#000000
+# Dracula theme
+set $foreground		#F8F8F2
+set $background		#282A36
+set $darkblack		#000000
+set $black		#4D4D4D
+set $darkred		#FF5555
+set $red		#FF6E67
+set $darkgreen		#50FA7B
+set $green		#5AF78E
+set $darkyellow		#F1FA8C
+set $yellow		#F4F99D
+set $darkblue		#5F819D
+set $blue		#81A2BE
+set $darkmagenta	#FF79C6
+set $magenta		#FF92D0
+set $darkcyan		#8BE9FD
+set $cyan		#9AEDFE
+set $darkwhite		#BFBFBF
+set $white		#E6E6E6
+set $transparent	#000000
 
 # Theme colors
 #                       BORDER		BACKGROUND	TEXT		INDICATOR   		CHILD_BORDER
