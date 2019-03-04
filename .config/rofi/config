@@ -2,13 +2,19 @@
 !                          ROFI THEME - MATT DOBSON
 ! ------------------------------------------------------------------------------
 
-rofi.color-window: argb:f2171717, #535c5c,         #a4a4a4
-rofi.color-normal: argb:00171717, #a4a4a4, argb:00535c5c, argb:00171717, #535c5c
-rofi.color-urgent: argb:00171717, #cc6666, argb:e54b5160, argb:00171717, #535c5c
-rofi.color-active: argb:00171717, #65acff, argb:e44b5160, argb:00171717, #535c5c
+!rofi.color-enabled: true
+
+!                  Background   Border      Separator
+rofi.color-window: argb:f2171717, #535c5c,  #a4a4a4
+
+!                  Background     Foreground  Background Alternate    Highlight Background    Highlight Foreground
+rofi.color-normal: argb:00171717, #f8f8f2,    argb:00171717,          #373844,  #f8f8f2
+rofi.color-urgent: argb:00171717, #cc6666,    argb:00171717,          #373844,  #fdf6e3
+rofi.color-active: argb:00171717, #65acff,    argb:00171717,          #373844,  #fdf6e3
+
+rofi.font: Lucida Grande 11
 rofi.width: 550
 rofi.lines: 15
-rofi.font: System San Francisco Display 11
 rofi.bw: 0
 rofi.padding: 50
 rofi.line-margin: 10
