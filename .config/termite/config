@@ -20,7 +20,7 @@ foreground = #F8F8F2
 background = #282A36
 
 # Background transparency
-background = rgba(29, 31, 40, 0.7)
+background = rgba(29, 31, 40, 0.9)
 
 # Dracula theme
 color0 =     #000000

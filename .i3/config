@@ -68,16 +68,23 @@ bindsym XF86AudioPrev exec playerctl previous
 # Start Applications
 bindsym $mod+Ctrl+b exec --no-startup-id $terminal -e 'bmenu'
 bindsym $mod+F2 exec firefox
-bindsym $mod+F3 exec pcmanfm
-bindsym $mod+Shift+F3 exec gksu pcmanfm
+bindsym $mod+F3 exec nemo
+bindsym $mod+Shift+F3 exec gksu nemo
 bindsym $mod+F5 exec --no-startup-id $terminal -e 'mocp'
 bindsym $mod+t exec --no-startup-id pkill compton
 bindsym $mod+Ctrl+t exec --no-startup-id compton -b
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
-bindsym Print exec --no-startup-id i3-scrot
-bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
-bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
 bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
+
+# Screenshot shortcuts
+# Copy entire screen to clipboard
+bindsym Print --release exec --no-startup-id maim | xclip -selection clipboard -t image/png
+# Save entire screen to file
+bindsym Shift+Print --release exec --no-startup-id maim ~/screenshot-$(date +%s).png
+# Select a window or an area and copy to clipboard
+bindsym $mod+Print --release exec --no-startup-id maim -s | xclip -selection clipboard -t image/png
+# Select a window or an area and save to file
+bindsym $mod+Shift+Print --release exec --no-startup-id maim -s ~/screenshot-$(date +%s).png
 
 # focus_follows_mouse no
 
