@@ -4,13 +4,13 @@
 
 !rofi.color-enabled: true
 
-!                  Background   Border      Separator
-rofi.color-window: argb:f2171717, #535c5c,  #a4a4a4
+!                  Background       Border       Separator
+rofi.color-window: argb:f2171717,   #535c5c,     #a4a4a4
 
-!                  Background     Foreground  Background Alternate    Highlight Background    Highlight Foreground
-rofi.color-normal: argb:00171717, #f8f8f2,    argb:00171717,          #373844,                #f8f8f2
-rofi.color-urgent: argb:00171717, #cc6666,    argb:00171717,          #373844,                #fdf6e3
-rofi.color-active: argb:00171717, #65acff,    argb:00171717,          #373844,                #fdf6e3
+!                  Background       Foreground   Background Alternate    Highlight Background    Highlight Foreground
+rofi.color-normal: argb:00171717,   #b5b5b1,     argb:00171717,          #282a36,                #cbcbc7
+rofi.color-urgent: argb:00171717,   #cc6666,     argb:00171717,          #373844,                #fdf6e3
+rofi.color-active: argb:00171717,   #65acff,     argb:00171717,          #373844,                #fdf6e3
 
 rofi.font: Lucida Grande 10
 rofi.width: 550
