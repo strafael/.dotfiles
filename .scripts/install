@@ -89,9 +89,9 @@ function install_vim_plugins {
 		7 70
 	# Para funcionar em modo non interactive, adicione "silent!" antes dos
 	# comandos que causam erros quando os plugins ainda não estão
-	#os plugins não existem instalados
-	/usr/bin/nvim +'PlugInstall --sync' +qa >/dev/null 2>&1
-	/usr/bin/vim +'PlugInstall --sync' +qa >/dev/null 2>&1
+	# os plugins não existem instalados
+	sudo -u "$username" /usr/bin/nvim +'PlugInstall --sync' +qa >/dev/null 2>&1
+	sudo -u "$username" /usr/bin/vim +'PlugInstall --sync' +qa >/dev/null 2>&1
 }
 
 
@@ -109,7 +109,7 @@ function show_done_msg {
 # Atualiza o sistema e ao mesmo tempo garante que está rodando como root
 pacman -Syu --noconfirm --needed dialog || error "Este script deve ser executado como root"
 
-show_welcome_msg || error "Abortado."
+# show_welcome_msg || error "Abortado."
 get_username || error "Abortado."
 
 # Adiciona o usuário ao grupo wheel
