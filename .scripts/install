@@ -112,10 +112,10 @@ pacman -Syu --noconfirm --needed dialog || error "Este script deve ser executado
 # show_welcome_msg || error "Abortado."
 get_username || error "Abortado."
 
+show_pre_install_msg || error "Abortado."
+
 # Adiciona o usuário ao grupo wheel
 usermod -aG wheel $username
-
-show_pre_install_msg || error "Abortado."
 
 # Instala base-devel e git, necessários para instalar o resto dos pacotes
 dialog --title "Instalação" --infobox "Instalando \`base-devel\` e \`git\`..." 5 70
