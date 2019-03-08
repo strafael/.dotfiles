@@ -1,4 +1,4 @@
-# .dotfiles ❤ ~/
+# dotfiles
 
 My configuration files repository.
 
