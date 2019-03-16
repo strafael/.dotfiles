@@ -87,6 +87,8 @@ function install_vim_plugins {
 		--title "Instalação" \
 		--infobox "Instalando vim plugins..." \
 		7 70
+	# Instala VimPlug no Neovim
+	curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	# Para funcionar em modo non interactive, adicione "silent!" antes dos
 	# comandos que causam erros quando os plugins ainda não estão
 	# os plugins não existem instalados
@@ -98,7 +100,7 @@ function install_vim_plugins {
 function show_done_msg {
 	dialog \
 		--title "Tudo pronto!" \
-		--msgbox "Pronto! Supondo que não deu nenhum erro que foi omitido por estas janelas bonitinhas, o script foi executado com sucesso, todos os softwares foram instalados, e os arquivos de configuração devem estar em seus lugares.\\n\\nUm backup dos arquivos de configuração pré-existentes que seriam sobrescritos foi criado em ~/.dotfiles-backup.\\n\\nReinice o computador para aplicar as configurações." \
+		--msgbox "Pronto! Supondo que não deu nenhum erro que foi omitido por estas janelas, o script foi executado com sucesso, todos os softwares foram instalados, e os arquivos de configuração devem estar em seus lugares.\\n\\nUm backup dos arquivos de configuração pré-existentes que seriam sobrescritos foi criado em ~/.dotfiles-backup.\\n\\nReinice o computador para aplicar as configurações." \
 		13 80
 }
 
