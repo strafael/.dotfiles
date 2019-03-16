@@ -287,7 +287,7 @@ exec --no-startup-id caffeine
 # exec_always --no-startup-id sbxkb
 exec --no-startup-id conky -c $HOME/.config/conky_maia
 exec --no-startup-id xautolock -time 10 -locker "$locker"
-exec --no-startup-id betterlockscreen -u /usr/share/backgrounds/
+exec_always --no-startup-id betterlockscreen -u /usr/share/backgrounds/
 exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
 exec_always --no-startup-id $HOME/.config/polybar/launch
