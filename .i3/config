@@ -7,7 +7,7 @@ set $alt Mod1
 
 # To use urxvt as default terminal, uncomment next line
 # set $terminal --no-startup-id terminal
-set $terminal termite
+set $terminal gnome-terminal
 
 # Se lock screen command
 set $locker betterlockscreen --lock dim
