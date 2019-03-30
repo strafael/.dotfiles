@@ -73,6 +73,15 @@ function configure_docker {
 }
 
 
+function install_spacemacs {
+	dialog \
+		--title "Instalação" \
+		--infobox "Instalando Spacemacs..." \
+		7 70
+	git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d >/dev/null 2>&1
+}
+
+
 function install_dotfiles {
 	dialog \
 		--title "Instalação" \
@@ -140,6 +149,7 @@ pacman --noconfirm --needed -S yay >/dev/null 2>&1
 
 install_from_package_list || error "Abortado."
 configure_docker || error "Abortado."
+install_spacemacs || error "Abortado."
 install_dotfiles || error "Abortado."
 install_vim_plugins || error "Abortado."
 show_done_msg || error "Abortado."
