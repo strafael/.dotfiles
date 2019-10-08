@@ -147,11 +147,10 @@ echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf
 # Instala yay como AUR helper
 pacman --noconfirm --needed -S yay >/dev/null 2>&1
 
-install_from_package_list || error "Abortado."
-configure_docker || error "Abortado."
-install_spacemacs || error "Abortado."
-install_dotfiles || error "Abortado."
-install_vim_plugins || error "Abortado."
-show_done_msg || error "Abortado."
+install_from_package_list || error "Abortado (1)"
+configure_docker || error "Abortado (2)"
+install_spacemacs || error "Abortado (3)"
+install_dotfiles || error "Abortado (4)"
+install_vim_plugins || error "Abortado (5)"
+show_done_msg || error "Abortado (6)"
 clear
-
