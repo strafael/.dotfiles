@@ -26,8 +26,7 @@
                 (bg3          "#464752")
                 (bg4          "#565761")
                 (bg5          "#44475a")
-                (bg6          "#464752")
-		(cursor       "#1abb9b")
+                (bg6          "#b45bcf")
                 (key2         "#0189cc")
                 (key3         "#ff79c6")
                 (builtin      "#ffb86c")
@@ -52,7 +51,7 @@
                 (eph-verbatim "#f1fa8c")
                 (eph-code     "#ff79c6")))
       (faces '(;; default
-               (cursor :background ,cursor)
+               (cursor :background ,fg3)
                (default :background ,bg1 :foreground ,fg1)
                (default-italic :italic t)
                (ffap :foreground ,fg4)
@@ -63,7 +62,7 @@
                (info-string :foreground ,str)
                (lazy-highlight :foreground ,fg2 :background ,bg3)
                (link :foreground ,const :underline t)
-               (linum :foreground ,bg2 :background ,bg1)
+               (linum :foreground ,bg4 :background ,bg1)
                (minibuffer-prompt :bold t :foreground ,keyword)
                (region :background ,str :foreground ,bg1)
                (show-paren-match-face :background ,warning)
@@ -448,3 +447,4 @@
 ;; End:
 
 ;;; dracula-theme.el ends here
+
