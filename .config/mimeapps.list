@@ -23,3 +23,4 @@ inode/directory=nemo.desktop
 [Added Associations]
 x-scheme-handler/mailto=userapp-Thunderbird-5P3MYZ.desktop;
 message/rfc822=userapp-Thunderbird-5P3MYZ.desktop;
+text/plain=sublime_text_3.desktop;

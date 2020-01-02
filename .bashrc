@@ -142,7 +142,6 @@ ex ()
 # Custom settings
 # ----------------------
 PS1="\[\033[01;32m\][\h\[\033[01;37m\] \W\[\033[01;32m\]]\$\[\033[00m\] "
-CDPATH=".:~/:~/code"
 
 # Função para ativar um virtualenv dentro de uma pasta
 activate() {
@@ -157,6 +156,9 @@ activate() {
 # Ativa o virtualenv se terminal for aberto em pasta que tenha um virtualenv
 activate
 
+# Infinite bash history
+HISTSIZE= HISTFILESIZE=
+
 # Bash Aliases
 alias h='history | grep -i'
 alias g='grep -i'
@@ -166,3 +168,8 @@ alias tree='tree -I '"'"'.git|venv'"'"''
 alias pkglist='comm -23 <(pacman -Qqet | sort) <(pacman -Qqg base base-devel xorg | sort)'
 alias vim='nvim'
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME/'
+
+# Oracle OCI config
+[[ -e "/home/rafael/lib/oracle-cli/lib/python3.7/site-packages/oci_cli/bin/oci_autocomplete.sh" ]] && source "/home/rafael/lib/oracle-cli/lib/python3.7/site-packages/oci_cli/bin/oci_autocomplete.sh"
+export KUBECONFIG=$HOME/.kube/config
+
