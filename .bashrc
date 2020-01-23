@@ -170,6 +170,9 @@ alias vim='nvim'
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME/'
 alias cpanel='kubectl exec -n apps -it $(kubectl get pods -n apps | grep 'bots-control-panel' | awk '"'"'{ print $1 }'"'"') -- /bin/bash'
 
+# Jump around
+. $HOME/.scripts/z
+
 # Oracle OCI config
 [[ -e "/home/rafael/lib/oracle-cli/lib/python3.7/site-packages/oci_cli/bin/oci_autocomplete.sh" ]] && source "/home/rafael/lib/oracle-cli/lib/python3.7/site-packages/oci_cli/bin/oci_autocomplete.sh"
 export KUBECONFIG=$HOME/.kube/config
