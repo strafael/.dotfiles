@@ -160,6 +160,7 @@ activate
 HISTSIZE= HISTFILESIZE=
 
 # Bash Aliases
+alias c='clear'
 alias h='history | grep -i'
 alias g='grep -i'
 alias ll='ls -lh'
