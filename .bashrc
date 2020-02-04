@@ -172,6 +172,7 @@ alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME/'
 alias cpanel='kubectl exec -n apps -it $(kubectl get pods -n apps | grep 'bots-control-panel' | awk '"'"'{ print $1 }'"'"') -- /bin/bash'
 
 # Jump around
+# Data file: $HOME/.z
 . $HOME/.scripts/z
 
 # Oracle OCI config
