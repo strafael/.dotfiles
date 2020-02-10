@@ -71,8 +71,9 @@
 	unwip = ![[ "$(git log -1 --pretty=%B)" = "WIP" ]] && git pop || echo "No work in progress"
 
 	# Ignore files only locally
-	hide = update-index --assume-unchanged
-	unhide = update-index --no-assume-unchanged
+	ignore = update-index --assume-unchanged
+	unignore = update-index --no-assume-unchanged
+	ignored = !git ls-files -v | grep '^[[:lower:]]'
 	
 	# Cleaning up your topic branch 
 	done = "!f() { count=$(git rev-list --count origin/master..HEAD) && git rebase -i HEAD~$count origin/master; }; f"
@@ -81,8 +82,7 @@
 	update = !git a . && git cm update
 	
 	# Deletes orphaned remote branches (.git/refs/remotes/origin)
-	# clean up reflog
-	# TODO: cleanupbranches = 
+	cleanupbranches = !git fetch --prune && git branch -lvv | cut -c3- | awk '/: gone]/ {print $1}' | xargs git branch -D || echo "No branches deleted"
 	
 	# Switches to master (though you can specify a different default branch)
 	# Runs git ku to bring master up to speed with the origin
