@@ -135,9 +135,6 @@ nnoremap <s-Tab> :bprevious<CR>
 " Prepare throw away register
 nnoremap <Leader>x "_
 
-" Finding content in files
-nnoremap <Leader>sp :Rg<CR>
-
 " =========================================================
 " Plugings - Make sure you use single quotes
 " =========================================================
