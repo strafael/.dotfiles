@@ -159,6 +159,9 @@ activate
 # Infinite bash history
 HISTSIZE= HISTFILESIZE=
 
+# Enable vi mode
+set -o vi
+
 # Bash Aliases
 alias c='clear'
 alias h='history | grep -i'
