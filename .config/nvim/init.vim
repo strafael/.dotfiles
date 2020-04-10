@@ -12,6 +12,8 @@ set number                          " Show line numbers
 set numberwidth=4                   " Minimal number of columns to use for the line number
 set relativenumber                  " Show the line number relative to the line with the cursor in front of each line
 set smartcase                       " Override the 'ignorecase' option if the search pattern contains upper case characters
+set hidden                          " Allows to edit multiple buffers without saving the modifications made to a buffer while loading other buffers
+set timeoutlen=2000                 " How long vim will wait for another key press after the leader key is pressed
 
 " Open new split panes to right and bottom, which feels more natural
 set splitbelow
@@ -19,21 +21,110 @@ set splitright
 
 filetype plugin indent on
 
+" Open config file
+nnoremap <Leader>fd :e ~/.config/nvim/init.vim<CR>
+
+" Reload config file
+nnoremap <Leader>fR :source ~/.config/nvim/init.vim<CR>:nohl<CR>
+
+" Save buffer
+nnoremap <Leader>fs :w<CR>
+
+" Copy buffer filename
+nnoremap <Leader>fy :let @+=expand("%:p")<CR>
+
+" Rename current buffer file
+" nnoremap <Leader>fR
+
+" Delete current buffer file
+" nnoremap <Leader>fD
+
+" Close buffer
+nnoremap <c-w> :bd<CR>
+nnoremap <Leader>bd :bd<CR>
+
+" Show all open buffers and their status
+" Enter / Ctrl-X / Ctrl-V to open in
+" current window / horizontal split / vertical split
+nnoremap <Leader>bb :Buffers<CR>
+
+" Copy buffer to clipboard
+nnoremap <Leader>bY gg"+yG``zz
+
+" Files in project
+" - Enter / Ctrl-X / Ctrl-V to open in
+"   current window / horizontal split / vertical split
+" - Press Tab to select multiple files
+nnoremap <Leader>pf :Files<CR>
+
+" Open history
+" - Enter / Ctrl-X / Ctrl-V to open in
+"   current window / horizontal split / vertical split
+" - Press Tab to select multiple files
+nnoremap <Leader>ph :History<CR>
+
+" Search content in project files
+" Enter / Ctrl-X / Ctrl-V to open in
+" current window / horizontal split / vertical split
+nnoremap <Leader>sp :RG<CR>
+
+" Replace in project
+" nnoremap <Leader>pR
+
+" Close all buffers
+nnoremap <Leader>pk :1,$bd<CR>
+
+" Resume search
+" nnoremap <Leader>rl
+
+" Split window right
+nnoremap <Leader>w/ <c-w>v
+
+" Split window horizontally
+nnoremap <Leader>w- <c-w>s
+
+" Close window
+nnoremap <Leader>wd :q<CR>
+
+" Close all windows except the active one
+nnoremap <Leader>w1 :only<CR>
+
+" Go one window left
+nnoremap <Leader>wh <c-w>h
+
+" Go one window right
+nnoremap <Leader>wl <c-w>l
+
+" Go one window up
+nnoremap <Leader>wk <c-w>k
+
+" Go one window down
+nnoremap <Leader>wj <c-w>j
+
+" Move window to far right
+nnoremap <Leader>wL <c-w>L
+
+" Move window to far left
+nnoremap <Leader>wH <c-w>H
+
+" Move window to very top
+nnoremap <Leader>wK <c-w>K
+
+" Move window to very bottom
+nnoremap <Leader>wJ <c-w>J
+
 " Code folding
 " Fold one, Open one, Fold all, Open all, respectively
-nnoremap <leader>- zc
-nnoremap <leader>= zo
-nnoremap <leader>_ zM
-nnoremap <leader>+ zR
-
-" Close all tabs and quit
-" nnoremap Q :qa<CR>
+nnoremap <Leader>- zc
+nnoremap <Leader>= zo
+nnoremap <Leader>_ zM
+nnoremap <Leader>+ zR
 
 " Select all
-nnoremap <c-a> <esc>gg0vG$
+nnoremap <c-a> gg0vG$
 
 " Open a new empty buffer
-nnoremap <leader>n :enew<CR>
+nnoremap <Leader>n :enew<CR>
 
 " Move to the next buffer
 nnoremap <Tab> :bnext<CR>
@@ -41,17 +132,11 @@ nnoremap <Tab> :bnext<CR>
 " Move to the previous buffer
 nnoremap <s-Tab> :bprevious<CR>
 
-" Show all open buffers and their status
-nnoremap <leader>bl :ls<CR>
-
-" Close current buffer and move to the previous one
-nnoremap <c-x> :bp<BAR> bd #<CR>
-
 " Prepare throw away register
-nnoremap <leader>x "_
+nnoremap <Leader>x "_
 
 " Finding content in files
-nnoremap <c-g> :Rg<CR>
+nnoremap <Leader>sp :Rg<CR>
 
 " =========================================================
 " Plugings - Make sure you use single quotes
@@ -67,10 +152,10 @@ Plug 'haya14busa/incsearch.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-
-" Plug 'ctrlpvim/ctrlp.vim'
+Plug 'jreybert/vimagit'
+Plug 'ap/vim-css-color'
+Plug 'itchyny/lightline.vim'
+Plug 'junegunn/fzf.vim'
 
 " Initialize plugin system
 call plug#end()
@@ -124,7 +209,10 @@ let NERDTreeIgnore = ['\.py[cod]', '__pycache__', '.idea', '.egg', '.eggs', '.eg
 let NERDTreeShowHidden = 1
 
 " Toggle NerdTree
-map <a-1> :NERDTreeToggle<CR>
+nnoremap <Leader>ft :NERDTreeToggle<CR>
+
+" Show current file in NerdTree
+" nnoremap <Leader>fT
 
 "Close NerdTree when you open a file
 let NERDTreeQuitOnOpen = 1
@@ -136,16 +224,23 @@ let NERDTreeAutoDeleteBuffer = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 
+" =========================================================
+" Lightline
+" =========================================================
+let g:lightline = {
+      \ 'colorscheme': 'one',
+      \ }
 
 " =========================================================
-" Airline
+" FZF
 " =========================================================
-" Enable the list of buffers
-let g:airline#extensions#tabline#enabled = 1
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
 
-" Make airline work with the patched fonts
-let g:airline_powerline_fonts = 1
-
-" Show just the filename
-let g:airline#extensions#tabline#fnamemod = ':t'
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
