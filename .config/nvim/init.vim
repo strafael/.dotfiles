@@ -48,6 +48,9 @@ nnoremap <Leader>bd :bd<CR>
 " current window / horizontal split / vertical split
 nnoremap <Leader>bb :Buffers<CR>
 
+" Open a new empty buffer
+nnoremap <Leader>bN :enew<CR>
+
 " Copy buffer to clipboard
 nnoremap <Leader>bY gg"+yG``zz
 
@@ -55,13 +58,13 @@ nnoremap <Leader>bY gg"+yG``zz
 " - Enter / Ctrl-X / Ctrl-V to open in
 "   current window / horizontal split / vertical split
 " - Press Tab to select multiple files
-nnoremap <Leader>pf :Files<CR>
+nnoremap <Leader>ph :Files<CR>
 
 " Open history
 " - Enter / Ctrl-X / Ctrl-V to open in
 "   current window / horizontal split / vertical split
 " - Press Tab to select multiple files
-nnoremap <Leader>ph :History<CR>
+nnoremap <Leader>bh :History<CR>
 
 " Search content in project files
 " Enter / Ctrl-X / Ctrl-V to open in
@@ -123,9 +126,6 @@ nnoremap <Leader>+ zR
 " Select all
 nnoremap <c-a> gg0vG$
 
-" Open a new empty buffer
-nnoremap <Leader>n :enew<CR>
-
 " Move to the next buffer
 nnoremap <Tab> :bnext<CR>
 
@@ -153,6 +153,7 @@ Plug 'jreybert/vimagit'
 Plug 'ap/vim-css-color'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf.vim'
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Initialize plugin system
 call plug#end()
@@ -231,6 +232,8 @@ let g:lightline = {
 " =========================================================
 " FZF
 " =========================================================
+let g:fzf_layout = { 'down': '40%' }
+
 function! RipgrepFzf(query, fullscreen)
   let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
