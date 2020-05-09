@@ -1,0 +1,25 @@
+#!/bin/bash
+
+function usage {
+	echo "Usage: $(basename ${0}) [FILE]"
+	echo "Print the command to be used to decrypt the input."
+	echo ""
+	echo "With no FILE, or when FILE is -, read standard input."
+	echo ""
+	echo "  --help		display this help and exit"
+	exit 1
+}
+
+if [[ "${1}" == "--help" ]]; then
+	usage
+fi
+
+if [[ -z "${1}" ]]; then
+	input="$(</dev/stdin)"
+else
+	input="$(<${1})"
+fi
+
+output="$(echo "${input}" | gpg --symmetric - | base64 --wrap 0)"
+echo "echo "\""${output}"\"" | base64 -d | gpg --decrypt"
+
