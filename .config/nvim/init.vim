@@ -135,6 +135,9 @@ nnoremap <s-Tab> :bprevious<CR>
 " Prepare throw away register
 nnoremap <Leader>x "_
 
+" Map double Esc to return to normal mode in terminal
+tnoremap <Esc><Esc> <c-\><c-n>
+
 " =========================================================
 " Plugings - Make sure you use single quotes
 " =========================================================
