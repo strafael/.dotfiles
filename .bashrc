@@ -158,6 +158,12 @@ activate
 
 # Infinite bash history
 HISTSIZE= HISTFILESIZE=
+# Ignore one and two letter commands, and some simple commands
+HISTIGNORE="?:??:exit:pwd:clear:mount:umount:history:cd *"
+# ‘ignoredups’ causes lines which match the previous history entry to not be
+# saved. ‘erasedups’ causes all previous lines matching the current line to be
+# removed from the history list before that line is saved.
+HISTCONTROL=ignoreboth:erasedups
 
 # Enable vi mode
 set -o vi
