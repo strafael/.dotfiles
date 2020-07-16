@@ -135,6 +135,16 @@ nnoremap <s-Tab> :bprevious<CR>
 " Prepare throw away register
 nnoremap <Leader>x "_
 
+" Automatically append closing characters
+inoremap {      {}<Left>
+inoremap {<CR>  {<CR>}<Esc>O
+inoremap {{     {
+inoremap {}     {}
+inoremap        (  ()<Left>
+inoremap <expr> )  strpart(getline('.'), col('.')-1, 1) == ")" ? "\<Right>" : ")"
+inoremap <expr> ' strpart(getline('.'), col('.')-1, 1) == "\'" ? "\<Right>" : "\'\'\<Left>"
+inoremap <expr> " strpart(getline('.'), col('.')-1, 1) == "\"" ? "\<Right>" : "\"\"\<Left>"
+
 " =========================================================
 " Plugings - Make sure you use single quotes
 " =========================================================
@@ -153,8 +163,6 @@ Plug 'jreybert/vimagit'
 Plug 'ap/vim-css-color'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf.vim'
-Plug 'wakatime/vim-wakatime'
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Initialize plugin system
 call plug#end()
