@@ -163,6 +163,7 @@ Plug 'jreybert/vimagit'
 Plug 'ap/vim-css-color'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf.vim'
+Plug 'vimoutliner/vimoutliner'
 
 " Initialize plugin system
 call plug#end()
@@ -253,4 +254,9 @@ function! RipgrepFzf(query, fullscreen)
 endfunction
 
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
+" =========================================================
+" vim-outliner
+" =========================================================
+let maplocalleader = ',,'
 
