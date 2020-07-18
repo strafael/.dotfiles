@@ -3,6 +3,6 @@ if exists("did_load_filetypes")
   finish
 endif
 augroup filetypedetect
-  au! BufRead,BufNewFile *.txt		setfiletype votl
+  au! BufRead,BufNewFile *.txt		setfiletype taskpaper
 augroup END
 

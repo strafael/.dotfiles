@@ -145,6 +145,14 @@ inoremap <expr> )  strpart(getline('.'), col('.')-1, 1) == ")" ? "\<Right>" : ")
 inoremap <expr> ' strpart(getline('.'), col('.')-1, 1) == "\'" ? "\<Right>" : "\'\'\<Left>"
 inoremap <expr> " strpart(getline('.'), col('.')-1, 1) == "\"" ? "\<Right>" : "\"\"\<Left>"
 
+" Word completion navigating with 'C-j' and 'C-k'
+inoremap <expr> <C-j> pumvisible() ? "\<C-N>" : "j"
+inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "k"
+
+" Press F5 in normal mode or in insert mode to insert the current date
+:nnoremap <F5> "=strftime("%Y-%m-%d %a")<CR>P
+:inoremap <F5> <C-R>=strftime("%Y-%m-%d %a")<CR>
+
 " =========================================================
 " Plugings - Make sure you use single quotes
 " =========================================================
@@ -163,7 +171,7 @@ Plug 'jreybert/vimagit'
 Plug 'ap/vim-css-color'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf.vim'
-Plug 'vimoutliner/vimoutliner'
+Plug 'davidoc/taskpaper.vim'
 
 " Initialize plugin system
 call plug#end()
@@ -256,7 +264,8 @@ endfunction
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
 " =========================================================
-" vim-outliner
+" taskpaper
 " =========================================================
-let maplocalleader = ',,'
+let g:task_paper_date_format = "%Y-%m-%d %H:%M:%S"
+let g:task_paper_styles={'delegated': 'ctermfg=cyan guifg=cyan', 'email': 'ctermfg=lightred guifg=lightred', 'waiting': 'ctermfg=lightgreen guifg=lightgreen', 'started': 'ctermfg=grey guifg=grey', 'due': 'ctermfg=yellow guifg=yellow'}
 
