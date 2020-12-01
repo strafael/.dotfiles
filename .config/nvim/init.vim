@@ -116,8 +116,7 @@ nnoremap <Leader>wK <c-w>K
 " Move window to very bottom
 nnoremap <Leader>wJ <c-w>J
 
-" Code folding
-" Fold one, Open one, Fold all, Open all, respectively
+" Code folding Fold one, Open one, Fold all, Open all, respectively
 nnoremap <Leader>- zc
 nnoremap <Leader>= zo
 nnoremap <Leader>_ zM
@@ -134,6 +133,9 @@ nnoremap <s-Tab> :bprevious<CR>
 
 " Prepare throw away register
 nnoremap <Leader>x "_
+
+" Align paragraph
+nnoremap <a-q> gqap
 
 " Automatically append closing characters
 inoremap {      {}<Left>
@@ -156,7 +158,6 @@ inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "k"
 " Insert the current date and time in normal mode or in insert mode 
 :nnoremap <Leader><F5> "=strftime("%Y-%m-%d %a %H:%M")<CR>P
 :inoremap <Leader><F5> <C-R>=strftime("%Y-%m-%d %a %H:%M")<CR>
-
 
 " =========================================================
 " Plugings - Make sure you use single quotes

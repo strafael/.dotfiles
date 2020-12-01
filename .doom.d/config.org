@@ -1,0 +1,258 @@
+#+TITLE: Doom Emacs Config
+#+PROPERTY: header-args :tangle config.el
+
+* Table of contets :toc:
+- [[#about-this-config][About this config]]
+- [[#dired][dired]]
+- [[#doom-theme][Doom theme]]
+- [[#fonts][Fonts]]
+- [[#line-settings][Line settings]]
+- [[#mu4e][MU4E]]
+  - [[#falta-configurar-esse][Falta configurar esse]]
+- [[#neotree][Neotree]]
+- [[#open-specific-files][Open specific files]]
+- [[#org-mode][Org mode]]
+  - [[#add-blanklines-between-headlines][Add Blanklines between Headlines]]
+  - [[#tangle-on-save][Tangle on save]]
+- [[#shells][Shells]]
+
+* About this config
+This is my personal Doom Emacs config.
+Based on [[https://gitlab.com/dwt1/dotfiles/-/blob/master/.doom.d/config.org]]
+
+* dired
+Dired is the file manager within Emacs. Below, I setup keybindings for image
+previews (peep-dired). Doom Emacs does not use 'SPC d' for any of its
+keybindings, so I've chosen the format of 'SPC d' plus 'key'.
+
+| COMMAND                                   | DESCRIPTION                                     | KEYBINDING |
+|-------------------------------------------+-------------------------------------------------+------------|
+| dired                                     | /Open dired file manager/                         | SPC d d    |
+| dired-jump                                | /Jump to current directory in dired/              | SPC d j    |
+| (in dired) peep-dired                     | /Toggle image previews within dired/              | SPC d p    |
+| (in dired) dired-view-file                | /View file in dired/                              | SPC d v    |
+| (in dired) dired-up-directory             | Go up in the directory tree                     | h          |
+| (in dired) dired-find-file                | Go down in the directory tree (or open if file) | l          |
+| (in peep-dired-mode) peep-dired-next-file | /Move to next file in peep-dired-mode/            | j          |
+| (in peep-dired-mode) peep-dired-prev-file | /Move to previous file in peep-dired-mode/        | k          |
+
+#+BEGIN_SRC emacs-lisp
+(map! :leader
+      :desc "Dired"
+      "d d" #'dired
+      :leader
+      :desc "Dired jump to current"
+      "d j" #'dired-jump
+      (:after dired
+        (:map dired-mode-map
+         :leader
+         :desc "Peep-dired image previews"
+         "d p" #'peep-dired
+         :leader
+         :desc "Dired view file"
+         "d v" #'dired-view-file)))
+;; Make 'h' and 'l' go back and forward in dired. Much faster to navigate the directory structure!
+(evil-define-key 'normal dired-mode-map
+  (kbd "h") 'dired-up-directory
+  (kbd "l") 'dired-open-file) ; use dired-find-file instead if not using dired-open package
+;; If peep-dired is enabled, you will get image previews as you go up/down with 'j' and 'k'
+(evil-define-key 'normal peep-dired-mode-map
+  (kbd "j") 'peep-dired-next-file
+  (kbd "k") 'peep-dired-prev-file)
+(add-hook 'peep-dired-hook 'evil-normalize-keymaps)
+;; Get file icons in dired
+(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+;; With dired-open plugin, you can launch external programs for certain extensions
+;; For example, I set all .png files to open in 'sxiv' and all .mp4 files to open in 'mpv'
+(setq dired-open-extensions '(("gif" . "sxiv")
+                              ("jpg" . "sxiv")
+                              ("png" . "sxiv")
+                              ("mkv" . "mpv")
+                              ("mp4" . "mpv")))
+#+END_SRC
+
+* Doom theme
+Set doom theme.
+
+#+begin_src emacs-lisp
+(setq doom-theme 'doom-dracula)
+#+end_src
+
+* Fonts
+Settings related to fonts within Doom Emacs:
+- 'doom-font' -- standard monospace font that is used for most things in Emacs.
+- 'doom-variable-pitch-font' -- variable font which is useful in some Emacs plugins.
+- 'doom-big-font' -- used in doom-big-font-mode; useful for presentations.
+- 'font-lock-comment-face' -- for comments.
+- 'font-lock-keyword-face' -- for keywords with special significance, like ‘for’ and ‘if’ in C.
+
+#+begin_src emacs-lisp
+(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16)
+      doom-variable-pitch-font (font-spec :family "Ubuntu" :size 15)
+      doom-big-font (font-spec :family "DejaVu Sans Mono" :size 24))
+
+(after! doom-themes
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t))
+
+;; Show comments in italic
+(custom-set-faces!
+  '(font-lock-comment-face :slant italic))
+#+end_src
+
+* Line settings
+Toggle display-line-numbers-type so I have line numbers relative to the current
+line. Doom Emacs uses 'SPC t' for "toggle" commands, so I choose 'SPC t t' for
+toggle-truncate-lines.
+#+begin_src emacs-lisp
+(setq display-line-numbers-type 'relative)
+(map! :leader
+      :desc "Truncate lines"
+      "t t" #'toggle-truncate-lines)
+#+end_src
+
+* MU4E
+Setting up mu4e which is an email client that works within emacs. You must
+install mu4e and mbsync through your Linux distribution's package manager.
+Setting up smtp for sending mail. Make sure the gnutls command line utils are
+installed. Package 'gnutls-bin' in Debian/Ubuntu, and 'gnutls' in Arch.
+
+** TODO Falta configurar esse
+
+* Neotree
+Neotree is a file tree viewer. When you open neotree, it jumps to the current
+file thanks to neo-smart-open. The neo-window-fixed-size setting makes the
+neotree width be adjustable. Doom Emacs had no keybindings set for neotree.
+Since Doom Emacs uses 'SPC t' for 'toggle' keybindings, I used 'SPC t n' for
+toggle-neotree.
+
+#+begin_src emacs-lisp
+(after! neotree
+  (setq neo-window-fixed-size nil))
+#+end_src
+
+* Open specific files
+Keybindings to open files that I work with all the time using the find-file
+command non-interactively since we specify exactly what file to open. The format
+I use for these bindings is 'SPC -' plus 'key' since Doom Emacs does not use
+these keybindings.
+
+| PATH TO FILE     | DESCRIPTION      | KEYBINDING |
+|------------------+------------------+------------|
+| ~/org/agenda.org | /Edit agenda file/ | SPC - a    |
+
+#+begin_src emacs-lisp
+(map! :leader
+      :desc "Edit agenda file"
+      "a" #'(lambda () (interactive) (find-file "~/org/agenda.org")))
+#+end_src
+
+* Org mode
+#+begin_src emacs-lisp
+(after! org
+  (require 'org-bullets)
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  (setq org-directory "~/org/"
+        org-agenda-files '("~/org/agenda.org")
+        org-default-notes-file (expand-file-name "notes.org" org-directory)
+        org-ellipsis " ▼ "
+        org-log-done 'time
+        org-journal-dir "~/org/journal/"
+        org-journal-date-format "%d/%b/%Y %A"
+        org-journal-file-format "%Y-%m-%d.org"
+        org-hide-emphasis-markers t
+        org-todo-keywords
+          '((sequence
+             "TODO(t)"          ; A task that is ready to be tackled
+             "PROJ(p)"          ; Project with multiple task items
+             "NEXT(n)"          ; Task is next to be worked on
+             "STRT(s)"          ; Task is in progress
+             "WAIT(w)"          ; Task is blocked or waiting for something/someone
+             "|"                ; The pipe necessary to separate "active" states and "inactive" states
+             "DONE(d)")))       ; Task has been completed
+)
+#+end_src
+
+** Add Blanklines between Headlines
+Adds a newline between headlines, and also add blank characters at the end of
+the subtree, if a src block is at the end of the subtree.
+#+begin_src emacs-lisp
+(defun rs/org-end-of-headline()
+  "Move to end of current headline"
+  (interactive)
+  (outline-next-heading)
+  (forward-char -1))
+
+(defun rs/add-newline-between-headlines ()
+  ""
+  (when (equal major-mode 'org-mode)
+    (unless (org-at-heading-p)
+      (org-back-to-heading))
+    (rs/org-end-of-headline)
+    (if (not (org--line-empty-p 1))
+        (newline))))
+
+(defun rs/add-space-end-of-line ()
+  "If N-1 at end of heading is #+end_src then insert blank character on last line."
+  (interactive)
+  (when (equal major-mode 'org-mode)
+    (unless (org-at-heading-p)
+      (org-back-to-heading))
+    (rs/org-end-of-headline)
+    (next-line -1)
+    (if (org-looking-at-p "^#\\+end_src$")
+        (progn (next-line 1) (insert " ")))))
+
+(defun rs/newlines-between-headlines ()
+  "Uses the org-map-entries function to scan through a buffer's
+   contents and ensure newlines are inserted between headlines"
+  (interactive)
+  (org-map-entries #'rs/add-newline-between-headlines t 'file))
+
+(add-hook 'before-save-hook #'rs/newlines-between-headlines)
+#+end_src
+
+** Tangle on save
+The following function runs org-babel-tangle upon saving any org-mode buffer.
+This is asynchronous meaning that it dispatches the tangle function to a
+subprocess, so that the main Emacs is not blocked while it runs.
+
+#+BEGIN_SRC emacs-lisp
+(defun dt/org-babel-tangle-async (file)
+  "Invoke `org-babel-tangle-file' asynchronously."
+  (message "Tangling %s..." (buffer-file-name))
+  (async-start
+   (let ((args (list file)))
+  `(lambda ()
+        (require 'org)
+        ;;(load "~/.emacs.d/init.el")
+        (let ((start-time (current-time)))
+          (apply #'org-babel-tangle-file ',args)
+          (format "%.2f" (float-time (time-since start-time))))))
+   (let ((message-string (format "Tangling %S completed after " file)))
+     `(lambda (tangle-time)
+        (message (concat ,message-string
+                         (format "%s seconds" tangle-time)))))))
+
+(defun dt/org-babel-tangle-current-buffer-async ()
+  "Tangle current buffer asynchronously."
+  (dt/org-babel-tangle-async (buffer-file-name)))
+#+END_SRC
+
+* Shells
+Settings for the various shells and terminal emulators within Emacs.
+- 'shell-file-name' -- sets the shell to be used in M-x shell, M-x term, M-x
+  ansi-term and M-x vterm.
+- 'eshell-aliases-file' -- sets an aliases file for the eshell.
+
+#+BEGIN_SRC emacs-lisp
+(setq shell-file-name "/bin/bash"
+      eshell-aliases-file "~/.doom.d/aliases"
+      eshell-history-size 5000
+      eshell-buffer-maximum-lines 5000
+      eshell-hist-ignoredups t
+      eshell-scroll-to-bottom-on-input t
+      eshell-destroy-buffer-when-process-dies t
+      eshell-visual-commands'("bash" "htop" "ssh" "zsh")
+      vterm-max-scrollback 5000)
+#+end_src

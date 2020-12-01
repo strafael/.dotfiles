@@ -89,3 +89,5 @@
 	# Deletes all branches already merged into master using another alias, git cleanupbranches
 	# TODO: done = "!f() { git checkout {$1-master} && git ku && git cleanupbranches; }; f"
 
+[pull]
+	ff = only
