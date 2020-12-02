@@ -52,4 +52,5 @@
 (package! all-the-icons-dired)
 (package! dired-open)
 (package! org-bullets)
+(package! org-web-tools)
 (package! peep-dired)

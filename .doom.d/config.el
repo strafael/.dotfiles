@@ -33,7 +33,8 @@
 
 (setq doom-theme 'doom-dracula)
 
-(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16)
+;; (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16)
+(setq doom-font (font-spec :family "SauceCodePro Nerd Font Mono" :size 16 :style 'Medium)
       doom-variable-pitch-font (font-spec :family "Ubuntu" :size 15)
       doom-big-font (font-spec :family "DejaVu Sans Mono" :size 24))
 
@@ -61,13 +62,11 @@
   (require 'org-bullets)
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
   (setq org-directory "~/org/"
+        org-capture-todo-file "~/org/agenda.org"
         org-agenda-files '("~/org/agenda.org")
         org-default-notes-file (expand-file-name "notes.org" org-directory)
         org-ellipsis " ▼ "
         org-log-done 'time
-        org-journal-dir "~/org/journal/"
-        org-journal-date-format "%d/%b/%Y %A"
-        org-journal-file-format "%Y-%m-%d.org"
         org-hide-emphasis-markers t
         org-todo-keywords
           '((sequence
@@ -79,60 +78,6 @@
              "|"                ; The pipe necessary to separate "active" states and "inactive" states
              "DONE(d)")))       ; Task has been completed
 )
-
-(defun rs/org-end-of-headline()
-  "Move to end of current headline"
-  (interactive)
-  (outline-next-heading)
-  (forward-char -1))
-
-(defun rs/add-newline-between-headlines ()
-  ""
-  (when (equal major-mode 'org-mode)
-    (unless (org-at-heading-p)
-      (org-back-to-heading))
-    (rs/org-end-of-headline)
-    (if (not (org--line-empty-p 1))
-        (newline))))
-
-(defun rs/add-space-end-of-line ()
-  "If N-1 at end of heading is #+end_src then insert blank character on last line."
-  (interactive)
-  (when (equal major-mode 'org-mode)
-    (unless (org-at-heading-p)
-      (org-back-to-heading))
-    (rs/org-end-of-headline)
-    (next-line -1)
-    (if (org-looking-at-p "^#\\+end_src$")
-        (progn (next-line 1) (insert " ")))))
-
-(defun rs/newlines-between-headlines ()
-  "Uses the org-map-entries function to scan through a buffer's
-   contents and ensure newlines are inserted between headlines"
-  (interactive)
-  (org-map-entries #'rs/add-newline-between-headlines t 'file))
-
-(add-hook 'before-save-hook #'rs/newlines-between-headlines)
-
-(defun dt/org-babel-tangle-async (file)
-  "Invoke `org-babel-tangle-file' asynchronously."
-  (message "Tangling %s..." (buffer-file-name))
-  (async-start
-   (let ((args (list file)))
-  `(lambda ()
-        (require 'org)
-        ;;(load "~/.emacs.d/init.el")
-        (let ((start-time (current-time)))
-          (apply #'org-babel-tangle-file ',args)
-          (format "%.2f" (float-time (time-since start-time))))))
-   (let ((message-string (format "Tangling %S completed after " file)))
-     `(lambda (tangle-time)
-        (message (concat ,message-string
-                         (format "%s seconds" tangle-time)))))))
-
-(defun dt/org-babel-tangle-current-buffer-async ()
-  "Tangle current buffer asynchronously."
-  (dt/org-babel-tangle-async (buffer-file-name)))
 
 (setq shell-file-name "/bin/bash"
       eshell-aliases-file "~/.doom.d/aliases"
