@@ -56,14 +56,14 @@
 
 (map! :leader
       :desc "Edit agenda file"
-      "a" #'(lambda () (interactive) (find-file "~/org/agenda.org")))
+      "a" #'(lambda () (interactive) (find-file "~/org/todo.org")))
 
 (after! org
   (require 'org-bullets)
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
   (setq org-directory "~/org/"
-        +org-capture-todo-file "~/org/agenda.org"
-        org-agenda-files '("~/org/agenda.org")
+        +org-capture-todo-file "~/org/todo.org"
+        org-agenda-files '("~/org/todo.org", "~/org/calendar.org")
         org-default-notes-file (expand-file-name "notes.org" org-directory)
         org-ellipsis " ▼ "
         org-log-done 'time
