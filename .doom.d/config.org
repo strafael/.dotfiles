@@ -11,12 +11,12 @@
   - [[#falta-configurar-esse][Falta configurar esse]]
 - [[#neotree][Neotree]]
 - [[#open-specific-files][Open specific files]]
-- [[#org-mode][Org mode]]
-  - [[#organizing-my-org-file][Organizing My Org File]]
-  - [[#agenda][Agenda]]
-  - [[#org-file-structure][Org File Structure]]
-  - [[#capture-templates][Capture Templates]]
 - [[#shells][Shells]]
+- [[#org-mode][Org mode]]
+  - [[#getting-started][Getting started]]
+  - [[#tasks-and-states][Tasks and States]]
+  - [[#adding-new-tasks-quickly-with-org-capture][Adding New Tasks Quickly with Org Capture]]
+  - [[#configs-que-ja-tinha-feito-antes-de-ler-o-guia][Configs que ja tinha feito antes de ler o guia]]
 
 * About this config
 This is my personal Doom Emacs config.
@@ -159,40 +159,38 @@ these keybindings.
       "a" #'(lambda () (interactive) (find-file "~/org/todo.org")))
 #+end_src
 
-* Org mode
-#+begin_src emacs-lisp
-(after! org
-  (require 'org-bullets)
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-  (setq org-directory "~/org/"
-        +org-capture-todo-file "~/org/todo.org"
-        org-default-notes-file (expand-file-name "notes.org" org-directory)
-        org-ellipsis " ▼ "
-        org-log-done 'time
-        org-hide-emphasis-markers t
-        org-todo-keywords
-          '((sequence
-             "TODO(t)"          ; A task that is ready to be tackled
-             "PROJ(p)"          ; Project with multiple task items
-             "NEXT(n)"          ; Task is next to be worked on
-             "STRT(s)"          ; Task is in progress
-             "WAIT(w)"          ; Task is blocked or waiting for something/someone
-             "|"                ; The pipe necessary to separate "active" states and "inactive" states
-             "DONE(d)")))       ; Task has been completed
-)
+* Shells
+Settings for the various shells and terminal emulators within Emacs.
+- 'shell-file-name' -- sets the shell to be used in M-x shell, M-x term, M-x
+  ansi-term and M-x vterm.
+- 'eshell-aliases-file' -- sets an aliases file for the eshell.
+
+#+BEGIN_SRC emacs-lisp
+(setq shell-file-name "/bin/bash"
+      eshell-aliases-file "~/.doom.d/aliases"
+      eshell-history-size 5000
+      eshell-buffer-maximum-lines 5000
+      eshell-hist-ignoredups t
+      eshell-scroll-to-bottom-on-input t
+      eshell-destroy-buffer-when-process-dies t
+      eshell-visual-commands'("bash" "htop" "ssh" "zsh")
+      vterm-max-scrollback 5000)
 #+end_src
 
-** Organizing My Org File
+* Org mode
+** Getting started
+
+*** Organizing My Life into Org Files
 Tasks are separated into logical groupings or projects. Use separate org files
 for large task groupings and subdirectories for collections of files for
 multiple projects that belong together.
 
 Here are the sample files that I use
-| Filename              | Description                                |
-|-----------------------+--------------------------------------------|
-| todo.org              | Personal tasks and things to keep track of |
-| inbox.org             | Capture task inbox                         |
-| aurearobotics/Foo/Bar | Taks for project Bar of client Foo         |
+| Filename                  | Description                                |
+|---------------------------+--------------------------------------------|
+| todo.org                  | Personal tasks and things to keep track of |
+| inbox.org                 | Capture inbox                              |
+| aurearobotics/Foo/bar.org | Taks for project Bar of client Foo         |
 
 Org-mode is great for dealing with multiple clients and client projects. An org
 file becomes the collection of notes, tasks, reference material, etc. for a
@@ -203,14 +201,15 @@ things logically grouped and since projects come and go, this allows entire org
 files to be added or dropped from my agenda to keep only what is important
 visible in agenda views.
 
-** Agenda
+*** Agenda
 This is the =org-agenda-files= setup.
 
 #+begin_src emacs-lisp
 (after! org
   (setq org-agenda-files '("~/org/todo.org"
-                           "~/org/clients/firjan"
-                           "~/org/clients/brunel")))
+                           "~/org/aurearobotics"
+                           "~/org/aurearobotics/firjan"
+                           "~/org/aurearobotics/brunel")))
 #+end_src
 
 =org-mode= manages the =org-agenda-files= variable automatically using =C-c [= and =C-c
@@ -231,9 +230,119 @@ picked up.
     (define-key org-mode-map (kbd "C-c ]") nil))
 #+end_src
 
-** Org File Structure
+*** Org File Structure
+Most of my org files are set up with level 1 headings as main categories only.
+Tasks and projects normally start as level 2.
 
-** Capture Templates
+Here are some examples of my level 1 headings in
+
+=todo.org=:
+- Special Dates
+  + Birthdays
+  + Holidays
+- Finances
+- Health
+- House Maintenance
+- Notes
+- Tasks
+
+=aurearobotics.org=
+- System Maintenance
+- Payroll
+- Accounting
+- Finances
+- Hardware Maintenance
+- Tasks
+- Research and Development
+- Notes
+
+*** Key bindings
+The main reason I have special key bindings (like =F11=, and =F12=) is so that the
+keys work in any mode. If I'm in the Gnus summary buffer then =C-u C-c C-x C-i=
+doesn't work, but the =C-F11= key combination does and this saves me time since I
+don't have to visit an org-mode buffer first just to clock in a recent task.
+
+** Tasks and States
+
+I use the same set of TODO keywords for all of my org files. Org-mode lets you
+define TODO keywords per file but I find it's easier to have a standard set of
+TODO keywords globally so I can use the same setup in any org file I'm working
+with.
+
+*** Todo keywords
+#+begin_src emacs-lisp
+(after! org
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "WAITING(w@/!)" "|" "DONE(d)" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
+        ;; Antes de mudar as cores, dar um describe nesta variavel e só entao adaptar a partir dela
+        ;; org-todo-keyword-faces
+        ;; '(("TODO" :foreground "red" :weight bold)
+        ;;    ("NEXT" :foreground "blue" :weight bold)
+        ;;    ("DONE" :foreground "forest green" :weight bold)
+        ;;    ("WAITING" :foreground "orange" :weight bold)
+        ;;    ("HOLD" :foreground "magenta" :weight bold)
+        ;;    ("CANCELLED" :foreground "forest green" :weight bold)
+        ;;    ("MEETING" :foreground "forest green" :weight bold)
+        ;;    ("PHONE" :foreground "forest green" :weight bold))))
+#+end_src
+
+*** Project Task States
+I don't like to bother with manually stating 'this is a project' and 'that is
+not a project'. For me a project definition is really simple. If a task has
+subtasks with a todo keyword then it's a project. That's it.
+
+One subtask of a project needs to be marked NEXT so the project is not on the
+stuck projects list.
+
+*** Phone Calls
+Telephone calls are special. They are created in a done state by a capture task.
+
+The time of the call is recorded for as long as the capture task is active. If I
+need to look up other details and want to close the capture task early I can
+just =C-c C-c= to close the capture task (stopping the clock) and then =f9 SPC= to
+resume the clock in the phone call while I do other things.
+
+*** Meetings
+Meetings are special. They are created in a done state by a capture task. I use
+the MEETING capture template when someone interrupts what I'm doing with a
+question or discussion. This is handled similarly to phone calls where I clock
+the amount of time spent with whomever it is and record some notes of what was
+discussed, either during or after the meeting.
+
+The time of the meeting is recorded for as long as the capture task is active.
+If I need to look up other details and want to close the capture task early I
+can just =C-c C-c= to close the capture task (stopping the clock) and then =f9 SPC=
+to resume the clock in the meeting task while I do other things.
+
+*** Fast Todo Selection
+Fast todo selection allows changing from any task todo state to any other state
+directly by selecting the appropriate key from the fast todo selection key menu.
+This is a great feature!
+
+#+begin_src emacs-lisp
+(setq org-use-fast-todo-selection t)
+#+end_src
+
+Changing a task state is done with =SPC m t KEY= where =KEY= is the appropriate fast
+todo state selection key as defined in =org-todo-keywords=.
+
+The setting
+
+#+begin_src emacs-lisp
+(setq org-treat-S-cursor-todo-selection-as-state-change nil)
+#+end_src
+
+allows changing todo states with =S-left= and =S-right= skipping all of the normal
+processing when entering or leaving a todo state. This cycles through the todo
+states but skips setting timestamps and entering notes which is very convenient
+when all you want to do is fix up the status of an entry.
+
+** Adding New Tasks Quickly with Org Capture
+I create new tasks quickly using these templates. They are store in =inbox.org=
+and them I refile them to the correct location. Normally this file is empty.
+
+** Configs que ja tinha feito antes de ler o guia
+*** Capture Templates
 #+begin_src emacs-lisp
 (after! org
   (setq org-capture-templates
@@ -252,20 +361,16 @@ picked up.
           ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :prepend t))))
 #+end_src
 
-* Shells
-Settings for the various shells and terminal emulators within Emacs.
-- 'shell-file-name' -- sets the shell to be used in M-x shell, M-x term, M-x
-  ansi-term and M-x vterm.
-- 'eshell-aliases-file' -- sets an aliases file for the eshell.
-
-#+BEGIN_SRC emacs-lisp
-(setq shell-file-name "/bin/bash"
-      eshell-aliases-file "~/.doom.d/aliases"
-      eshell-history-size 5000
-      eshell-buffer-maximum-lines 5000
-      eshell-hist-ignoredups t
-      eshell-scroll-to-bottom-on-input t
-      eshell-destroy-buffer-when-process-dies t
-      eshell-visual-commands'("bash" "htop" "ssh" "zsh")
-      vterm-max-scrollback 5000)
+*** Outras configs do org
+#+begin_src emacs-lisp
+(after! org
+  (require 'org-bullets)
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  (setq org-directory "~/org/"
+        +org-capture-todo-file "~/org/todo.org"
+        org-default-notes-file (expand-file-name "notes.org" org-directory)
+        org-ellipsis " ▼ "
+        org-log-done 'time
+        org-hide-emphasis-markers t))
 #+end_src
+

@@ -58,34 +58,43 @@
       :desc "Edit agenda file"
       "a" #'(lambda () (interactive) (find-file "~/org/todo.org")))
 
-(after! org
-  (require 'org-bullets)
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-  (setq org-directory "~/org/"
-        +org-capture-todo-file "~/org/todo.org"
-        org-default-notes-file (expand-file-name "notes.org" org-directory)
-        org-ellipsis " ▼ "
-        org-log-done 'time
-        org-hide-emphasis-markers t
-        org-todo-keywords
-          '((sequence
-             "TODO(t)"          ; A task that is ready to be tackled
-             "PROJ(p)"          ; Project with multiple task items
-             "NEXT(n)"          ; Task is next to be worked on
-             "STRT(s)"          ; Task is in progress
-             "WAIT(w)"          ; Task is blocked or waiting for something/someone
-             "|"                ; The pipe necessary to separate "active" states and "inactive" states
-             "DONE(d)")))       ; Task has been completed
-)
+(setq shell-file-name "/bin/bash"
+      eshell-aliases-file "~/.doom.d/aliases"
+      eshell-history-size 5000
+      eshell-buffer-maximum-lines 5000
+      eshell-hist-ignoredups t
+      eshell-scroll-to-bottom-on-input t
+      eshell-destroy-buffer-when-process-dies t
+      eshell-visual-commands'("bash" "htop" "ssh" "zsh")
+      vterm-max-scrollback 5000)
 
 (after! org
   (setq org-agenda-files '("~/org/todo.org"
-                           "~/org/clients/firjan"
-                           "~/org/clients/brunel")))
+                           "~/org/aurearobotics"
+                           "~/org/aurearobotics/firjan"
+                           "~/org/aurearobotics/brunel")))
 
 (after! org
     (define-key org-mode-map (kbd "C-c [") nil)
     (define-key org-mode-map (kbd "C-c ]") nil))
+
+(after! org
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "WAITING(w@/!)" "|" "DONE(d)" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
+        ;; Antes de mudar as cores, dar um describe nesta variavel e só entao adaptar a partir dela
+        ;; org-todo-keyword-faces
+        ;; '(("TODO" :foreground "red" :weight bold)
+        ;;    ("NEXT" :foreground "blue" :weight bold)
+        ;;    ("DONE" :foreground "forest green" :weight bold)
+        ;;    ("WAITING" :foreground "orange" :weight bold)
+        ;;    ("HOLD" :foreground "magenta" :weight bold)
+        ;;    ("CANCELLED" :foreground "forest green" :weight bold)
+        ;;    ("MEETING" :foreground "forest green" :weight bold)
+        ;;    ("PHONE" :foreground "forest green" :weight bold))))
+
+(setq org-use-fast-todo-selection t)
+
+(setq org-treat-S-cursor-todo-selection-as-state-change nil)
 
 (after! org
   (setq org-capture-templates
@@ -103,12 +112,12 @@
           ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?\n %i\n %a" :heading "Notes" :prepend t)
           ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :prepend t))))
 
-(setq shell-file-name "/bin/bash"
-      eshell-aliases-file "~/.doom.d/aliases"
-      eshell-history-size 5000
-      eshell-buffer-maximum-lines 5000
-      eshell-hist-ignoredups t
-      eshell-scroll-to-bottom-on-input t
-      eshell-destroy-buffer-when-process-dies t
-      eshell-visual-commands'("bash" "htop" "ssh" "zsh")
-      vterm-max-scrollback 5000)
+(after! org
+  (require 'org-bullets)
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  (setq org-directory "~/org/"
+        +org-capture-todo-file "~/org/todo.org"
+        org-default-notes-file (expand-file-name "notes.org" org-directory)
+        org-ellipsis " ▼ "
+        org-log-done 'time
+        org-hide-emphasis-markers t))
