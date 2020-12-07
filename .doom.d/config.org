@@ -16,6 +16,8 @@
   - [[#getting-started][Getting started]]
   - [[#tasks-and-states][Tasks and States]]
   - [[#adding-new-tasks-quickly-with-org-capture][Adding New Tasks Quickly with Org Capture]]
+  - [[#refiling-tasks][Refiling Tasks]]
+  - [[#custom-agenda-views][Custom Agenda Views]]
   - [[#configs-que-ja-tinha-feito-antes-de-ler-o-guia][Configs que ja tinha feito antes de ler o guia]]
 
 * About this config
@@ -206,7 +208,7 @@ This is the =org-agenda-files= setup.
 
 #+begin_src emacs-lisp
 (after! org
-  (setq org-agenda-files '("~/org/todo.org"
+  (setq org-agenda-files '("~/org/"
                            "~/org/aurearobotics"
                            "~/org/aurearobotics/firjan"
                            "~/org/aurearobotics/brunel")))
@@ -339,37 +341,138 @@ when all you want to do is fix up the status of an entry.
 
 ** Adding New Tasks Quickly with Org Capture
 I create new tasks quickly using these templates. They are store in =inbox.org=
-and them I refile them to the correct location. Normally this file is empty.
+and them I refile them to the correct location. Normally this file is empty
+because I refile my inbox frequently.
 
-** Configs que ja tinha feito antes de ler o guia
 *** Capture Templates
+
+When a new item needs to be added I categorize it into one of a few things:
+
+- A phone call (=p)=
+- A meeting (=m=)
+- An email I need to respond to (=r=)
+- A new task (=t=)
+- A new note (=n=)
+- A journal entry (=j=)
+- A new habit (=h=)
+
+Here is my setup for org-capture
+
 #+begin_src emacs-lisp
 (after! org
+  (setq org-directory "~/org"
+        org-default-notes-file "~/org/inbox.org"
+        +org-capture-todo-file "~/org/inbox.org"
+        +org-capture-journal-file "~/org/journal.org"))
+
+;; I use C-c c to start capture mode
+(global-set-key (kbd "C-c c") 'org-capture)
+
+(after! org
   (setq org-capture-templates
-        '(("t" "Personal todo" entry (file+headline +org-capture-todo-file "Inbox") "* TODO %?\n%i\n%a" :prepend t)
-          ("n" "Personal notes" entry (file+headline +org-capture-notes-file "Inbox") "* %u %?\n%i\n%a" :prepend t)
-          ("j" "Journal" entry (file+olp+datetree +org-capture-journal-file) "* %U %?\n%i\n%a" :prepend t)
-
-          ("p" "Templates for projects")
-          ("pt" "Project-local todo" entry (file+headline +org-capture-project-todo-file "Inbox") "* TODO %?\n%i\n%a" :prepend t)
-          ("pn" "Project-local notes" entry (file+headline +org-capture-project-notes-file "Inbox") "* %U %?\n%i\n%a" :prepend t)
-          ("pc" "Project-local changelog" entry (file+headline +org-capture-project-changelog-file "Unreleased") "* %U %?\n%i\n%a" :prepend t)
-
-          ("o" "Centralized templates for projects")
-          ("ot" "Project todo" entry #'+org-capture-central-project-todo-file "* TODO %?\n %i\n %a" :heading "Tasks" :prepend nil)
-          ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?\n %i\n %a" :heading "Notes" :prepend t)
-          ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :prepend t))))
+        '(("t" "Todo" entry (file +org-capture-todo-file)
+           "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n")
+          ("r" "Responder Email" entry (file +org-capture-todo-file)
+               "* NEXT Respond %:from on %:subject\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n" :immediate-finish t)
+          ("n" "Note" entry (file org-default-notes-file)
+               "* %? :NOTE:\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n")
+          ("j" "Journal" entry (file+olp-datetree +org-capture-journal-file)
+               "* %U %?\n")
+          ("w" "org-protocol" entry (file +org-capture-todo-file)
+               "* TODO Review %c\n%U\n" :immediate-finish t)
+          ("m" "Meeting" entry (file +org-capture-notes-file)
+               "* MEETING with %?\n%U" :clock-in t :clock-resume t)
+          ("p" "Phone call" entry (file +org-capture-notes-file)
+               "* PHONE call with %?\n%U" :clock-in t :clock-resume t))))
 #+end_src
 
+Capture mode handles automatically clocking in and out of a capture task. When I
+start a capture mode task the task is clocked in as specified by =:clock-in t= and
+when the task is filed with =C-c C-c= the clock resumes on the original clocking
+task.
+
+** Refiling Tasks
+Refiling tasks is easy. After collecting a bunch of new tasks in my refile.org
+file using capture mode I need to move these to the correct org file and topic.
+All of my active org-files are in my =org-agenda-files= variable and contribute to
+the agenda.
+
+I collect capture tasks in inbox.org for up to a week. These stand out daily on
+my block agenda and I usually refile them during the day. I like to keep my
+refile task list empty.
+
+*** Refile Setup
+To refile tasks in org you need to tell it where you want to refile things.
+
+In my setup I let any file in =org-agenda-files= and the current file contribute
+to the list of valid refile targets.
+
+#+begin_src emacs-lisp
+; Targets include this file and any file contributing to the agenda - up to 9 levels deep
+(after! org
+  (setq org-refile-targets '((nil :maxlevel . 9) (org-agenda-files :maxlevel . 9))
+        ; Use full outline paths for refile targets - we file directly with IDO
+        org-refile-use-outline-path t
+        ; Targets complete directly with IDO
+        org-outline-path-complete-in-steps nil
+        ; Allow refile to create parent tasks with confirmation
+        org-refile-allow-creating-parent-nodes (quote confirm)))
+
+; Exclude DONE state tasks from refile targets
+(defun sr/verify-refile-target ()
+  "Exclude todo keywords with a done state from refile targets"
+  (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+
+(after! org
+  (setq org-refile-target-verify-function 'sr/verify-refile-target))
+#+end_src
+
+To refile a task to my =inbox.org= file under =System Maintenance= I just put the
+cursor on the task and hit =C-c C-w= and enter =main RET= and it's done.
+
+*** Refiling Tasks
+Tasks to refile are in their own section of the block agenda. To find tasks to
+refile I run my agenda view with =F12 SPC= and scroll down to second section of
+the block agenda: =Tasks to Refile=. This view shows all tasks (even ones marked
+in a =done= state).
+
+Bulk refiling in the agenda works very well for multiple tasks going to the same
+place. Just mark the tasks with =m= and then =B r= to refile all of them to a new
+location. Occasionally I'll also refile tasks as subtasks of the current
+clocking task using =C-2 C-c C-w= from the =inbox.org= file.
+
+Refiling all of my tasks tends to take less than a minute so I normally do this
+a couple of times a day.
+
+*** Refiling Notes
+I keep a =* Notes= headline in most of my org-mode files. Notes have a =NOTE= tag
+which is created by the capture template for notes. This allows finding notes
+across multiple files easily using the agenda search functions.
+
+Notes created by capture tasks go first to =inbox.org= and are later refiled to
+the appropriate project file. Some notes that are project related get filed to
+the appropriate project instead of under the catchall =* NOTES= task. Generally
+these types of notes are specific to the project and not generally useful – so
+removing them from the notes list when the project is archived makes sense.
+
+*** Refiling Phone Calls and Meetings
+Phone calls and meetings are handled using capture mode. I time my calls and
+meetings using the capture mode template settings to clock in and out the
+capture task while the phone call or meeting is in progress.
+
+Phone call and meeting tasks are collected in =inbox.org= and are later refiled to
+the appropriate location. I refile my phone call and meeting tasks under the
+appropriate project so time tracking and reports are as accurate as possible.
+
+** Custom Agenda Views
+
+** Configs que ja tinha feito antes de ler o guia
 *** Outras configs do org
 #+begin_src emacs-lisp
 (after! org
   (require 'org-bullets)
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-  (setq org-directory "~/org/"
-        +org-capture-todo-file "~/org/todo.org"
-        org-default-notes-file (expand-file-name "notes.org" org-directory)
-        org-ellipsis " ▼ "
+  (setq org-ellipsis " ▼ "
         org-log-done 'time
         org-hide-emphasis-markers t))
 #+end_src

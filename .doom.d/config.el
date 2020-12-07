@@ -69,7 +69,7 @@
       vterm-max-scrollback 5000)
 
 (after! org
-  (setq org-agenda-files '("~/org/todo.org"
+  (setq org-agenda-files '("~/org/"
                            "~/org/aurearobotics"
                            "~/org/aurearobotics/firjan"
                            "~/org/aurearobotics/brunel")))
@@ -97,27 +97,52 @@
 (setq org-treat-S-cursor-todo-selection-as-state-change nil)
 
 (after! org
+  (setq org-directory "~/org"
+        org-default-notes-file "~/org/inbox.org"
+        +org-capture-todo-file "~/org/inbox.org"
+        +org-capture-journal-file "~/org/journal.org"))
+
+;; I use C-c c to start capture mode
+(global-set-key (kbd "C-c c") 'org-capture)
+
+(after! org
   (setq org-capture-templates
-        '(("t" "Personal todo" entry (file+headline +org-capture-todo-file "Inbox") "* TODO %?\n%i\n%a" :prepend t)
-          ("n" "Personal notes" entry (file+headline +org-capture-notes-file "Inbox") "* %u %?\n%i\n%a" :prepend t)
-          ("j" "Journal" entry (file+olp+datetree +org-capture-journal-file) "* %U %?\n%i\n%a" :prepend t)
+        '(("t" "Todo" entry (file +org-capture-todo-file)
+           "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n")
+          ("r" "Responder Email" entry (file +org-capture-todo-file)
+               "* NEXT Respond %:from on %:subject\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n" :immediate-finish t)
+          ("n" "Note" entry (file org-default-notes-file)
+               "* %? :NOTE:\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n")
+          ("j" "Journal" entry (file+olp-datetree +org-capture-journal-file)
+               "* %U %?\n")
+          ("w" "org-protocol" entry (file +org-capture-todo-file)
+               "* TODO Review %c\n%U\n" :immediate-finish t)
+          ("m" "Meeting" entry (file +org-capture-notes-file)
+               "* MEETING with %?\n%U" :clock-in t :clock-resume t)
+          ("p" "Phone call" entry (file +org-capture-notes-file)
+               "* PHONE call with %?\n%U" :clock-in t :clock-resume t))))
 
-          ("p" "Templates for projects")
-          ("pt" "Project-local todo" entry (file+headline +org-capture-project-todo-file "Inbox") "* TODO %?\n%i\n%a" :prepend t)
-          ("pn" "Project-local notes" entry (file+headline +org-capture-project-notes-file "Inbox") "* %U %?\n%i\n%a" :prepend t)
-          ("pc" "Project-local changelog" entry (file+headline +org-capture-project-changelog-file "Unreleased") "* %U %?\n%i\n%a" :prepend t)
+; Targets include this file and any file contributing to the agenda - up to 9 levels deep
+(after! org
+  (setq org-refile-targets '((nil :maxlevel . 9) (org-agenda-files :maxlevel . 9))
+        ; Use full outline paths for refile targets - we file directly with IDO
+        org-refile-use-outline-path t
+        ; Targets complete directly with IDO
+        org-outline-path-complete-in-steps nil
+        ; Allow refile to create parent tasks with confirmation
+        org-refile-allow-creating-parent-nodes (quote confirm)))
 
-          ("o" "Centralized templates for projects")
-          ("ot" "Project todo" entry #'+org-capture-central-project-todo-file "* TODO %?\n %i\n %a" :heading "Tasks" :prepend nil)
-          ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?\n %i\n %a" :heading "Notes" :prepend t)
-          ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :prepend t))))
+; Exclude DONE state tasks from refile targets
+(defun sr/verify-refile-target ()
+  "Exclude todo keywords with a done state from refile targets"
+  (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+
+(after! org
+  (setq org-refile-target-verify-function 'sr/verify-refile-target))
 
 (after! org
   (require 'org-bullets)
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-  (setq org-directory "~/org/"
-        +org-capture-todo-file "~/org/todo.org"
-        org-default-notes-file (expand-file-name "notes.org" org-directory)
-        org-ellipsis " ▼ "
+  (setq org-ellipsis " ▼ "
         org-log-done 'time
         org-hide-emphasis-markers t))
