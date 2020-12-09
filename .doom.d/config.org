@@ -371,25 +371,27 @@ Here is my setup for org-capture
 (after! org
   (setq org-capture-templates
         '(("t" "Todo" entry (file +org-capture-todo-file)
-           "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n")
+           "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
           ("r" "Responder Email" entry (file +org-capture-todo-file)
-               "* NEXT Respond %:from on %:subject\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n" :immediate-finish t)
+               "* NEXT Respond %:from on %:subject\nSCHEDULED: %t\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n" :immediate-finish t)
           ("n" "Note" entry (file org-default-notes-file)
-               "* %? :NOTE:\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n")
+               "* %? :NOTE:\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n" :clock-in t :clock-resume t)
           ("j" "Journal" entry (file+olp-datetree +org-capture-journal-file)
-               "* %U %?\n")
+               "* %U %?\n" :clock-in t :clock-resume t)
           ("w" "org-protocol" entry (file +org-capture-todo-file)
-               "* TODO Review %c\n%U\n" :immediate-finish t)
+               "* TODO Review %c\n:CREATED: %U\n:END:\n" :immediate-finish t)
           ("m" "Meeting" entry (file +org-capture-notes-file)
-               "* MEETING with %?\n%U" :clock-in t :clock-resume t)
+               "* MEETING with %?\n:CREATED: %U\n:END:\n" :clock-in t :clock-resume t)
           ("p" "Phone call" entry (file +org-capture-notes-file)
-               "* PHONE call with %?\n%U" :clock-in t :clock-resume t))))
+               "* PHONE call with %?\n:CREATED: %U\n:END:\n" :clock-in t :clock-resume t))))
 #+end_src
 
 Capture mode handles automatically clocking in and out of a capture task. When I
 start a capture mode task the task is clocked in as specified by =:clock-in t= and
 when the task is filed with =C-c C-c= the clock resumes on the original clocking
 task.
+
+I use journal entries to log interruptions as events for that day.
 
 ** Refiling Tasks
 Refiling tasks is easy. After collecting a bunch of new tasks in my refile.org
@@ -465,6 +467,92 @@ the appropriate location. I refile my phone call and meeting tasks under the
 appropriate project so time tracking and reports are as accurate as possible.
 
 ** Custom Agenda Views
+I have one block agenda view that has everything on it.
+
+Custom agenda views are used for:
+- Single block agenda shows the following
+  + Overview of today
+  + Finding tasks to be refiled
+  + Finding stuck projects
+  + Finding NEXT tasks to work on
+  + Show all related tasks
+  + Reviewing projects
+  + Finding tasks waiting on something
+  + Finding tasks to be archived
+- Finding notes
+
+If I want just today's calendar view then =F12= a is still faster than generating
+the block agenda - especially if I want to view a week or month's worth of
+information, or check my clocking data. In that case the extra detail on the
+block agenda view is never really needed and I don't want to spend time waiting
+for it to be generated.
+
+*** Setup
+#+begin_src emacs-lisp
+;; Do not dim blocked tasks
+(setq org-agenda-dim-blocked-tasks nil)
+
+;; Compact the block agenda view
+(setq org-agenda-compact-blocks t)
+
+;; Custom agenda command definitions
+(setq org-agenda-custom-commands
+      '(("N" "Notes" tags "NOTE"
+         ((org-agenda-overriding-header "Notes")
+          (org-tags-match-list-sublevels t)))
+        ("h" "Habits" tags-todo "STYLE=\"habit\""
+         ((org-agenda-overriding-header "Habits")
+          (org-agenda-sorting-strategy
+           '(todo-state-down effort-up category-keep))))
+        (" " "Agenda"
+         ((agenda "" nil)
+          (tags "REFILE"
+                ((org-agenda-overriding-header "Tasks to Refile")
+                 (org-tags-match-list-sublevels nil))))
+         nil)))
+#+end_src
+
+This shows top-level projects and =NEXT= tasks but hides the project details since
+we are not focused on any particular project.
+
+I generally work top-down on the agenda. Things with deadlines and scheduled
+dates show up in the agenda at the top.
+
+My day goes generally like this:
+
+- Punch in
+- Look at the agenda and make mental note of anything important to deal with today
+- Start working on a task
+  + Clock it in
+  + Work on it until it is =DONE= or it gets interrupted
+- Make journal entries (=C-c c j=) for interruptions
+- Punch out for breaks and punch back after breaks
+- Refile tasks to empty the list
+  + Tag tasks to be refiled with =m= collecting all tasks for the same target
+  + Bulk refile the tasks on the target location with =B r=
+  + Refile individually with =C-c C-w=
+- Punch out
+
+**** TODO Configurar =org-agenda-custom-commands= depois de já ter criado e entendido como funciona e a necessidade dos métodos que ele cria
+
+*** Reading email, articles and conversations
+When reading email I just let the default task clock the time I spend on these
+tasks. To read email I go to the Emacs email client and read everything in my
+inboxes. If there are emails that require a response I use org-capture to create
+a new task with a heading of 'Respond to <user>' for each one. This
+automatically links to the email in the task and makes it easy to find later.
+Some emails are quick to respond to and some take research and a significant
+amount of time to complete. I clock each one in it's own task. The capture
+template for Respond To tasks is schedule for today so I can refile the task to
+the appropriate org file without losing the task and end up forgeting about it.
+
+Next, I go to my newly created tasks to be refiled from the block agenda and
+clock in an email task and deal with it.
+
+If an article has a useful piece of information I want to remember I create a
+note for it with =C-c c n= and enter the topic and file it. This takes practically
+no time at all and I know the note is safely filed for later retrieval. The time
+I spend in the capture buffer is clocked with that capture note.
 
 ** Configs que ja tinha feito antes de ler o guia
 *** Outras configs do org
@@ -474,6 +562,7 @@ appropriate project so time tracking and reports are as accurate as possible.
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
   (setq org-ellipsis " ▼ "
         org-log-done 'time
-        org-hide-emphasis-markers t))
+        org-hide-emphasis-markers t
+        calendar-week-start-day 1
+        ))
 #+end_src
-

@@ -108,19 +108,19 @@
 (after! org
   (setq org-capture-templates
         '(("t" "Todo" entry (file +org-capture-todo-file)
-           "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n")
+           "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
           ("r" "Responder Email" entry (file +org-capture-todo-file)
-               "* NEXT Respond %:from on %:subject\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n" :immediate-finish t)
+               "* NEXT Respond %:from on %:subject\nSCHEDULED: %t\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n" :immediate-finish t)
           ("n" "Note" entry (file org-default-notes-file)
-               "* %? :NOTE:\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n")
+               "* %? :NOTE:\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n" :clock-in t :clock-resume t)
           ("j" "Journal" entry (file+olp-datetree +org-capture-journal-file)
-               "* %U %?\n")
+               "* %U %?\n" :clock-in t :clock-resume t)
           ("w" "org-protocol" entry (file +org-capture-todo-file)
-               "* TODO Review %c\n%U\n" :immediate-finish t)
+               "* TODO Review %c\n:CREATED: %U\n:END:\n" :immediate-finish t)
           ("m" "Meeting" entry (file +org-capture-notes-file)
-               "* MEETING with %?\n%U" :clock-in t :clock-resume t)
+               "* MEETING with %?\n:CREATED: %U\n:END:\n" :clock-in t :clock-resume t)
           ("p" "Phone call" entry (file +org-capture-notes-file)
-               "* PHONE call with %?\n%U" :clock-in t :clock-resume t))))
+               "* PHONE call with %?\n:CREATED: %U\n:END:\n" :clock-in t :clock-resume t))))
 
 ; Targets include this file and any file contributing to the agenda - up to 9 levels deep
 (after! org
@@ -140,9 +140,33 @@
 (after! org
   (setq org-refile-target-verify-function 'sr/verify-refile-target))
 
+;; Do not dim blocked tasks
+(setq org-agenda-dim-blocked-tasks nil)
+
+;; Compact the block agenda view
+(setq org-agenda-compact-blocks t)
+
+;; Custom agenda command definitions
+(setq org-agenda-custom-commands
+      '(("N" "Notes" tags "NOTE"
+         ((org-agenda-overriding-header "Notes")
+          (org-tags-match-list-sublevels t)))
+        ("h" "Habits" tags-todo "STYLE=\"habit\""
+         ((org-agenda-overriding-header "Habits")
+          (org-agenda-sorting-strategy
+           '(todo-state-down effort-up category-keep))))
+        (" " "Agenda"
+         ((agenda "" nil)
+          (tags "REFILE"
+                ((org-agenda-overriding-header "Tasks to Refile")
+                 (org-tags-match-list-sublevels nil))))
+         nil)))
+
 (after! org
   (require 'org-bullets)
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
   (setq org-ellipsis " ▼ "
         org-log-done 'time
-        org-hide-emphasis-markers t))
+        org-hide-emphasis-markers t
+        calendar-week-start-day 1
+        ))
