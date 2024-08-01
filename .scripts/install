@@ -1,6 +1,6 @@
 #!/bin/bash
-PACKAGE_LIST=https://raw.githubusercontent.com/rtogo/.dotfiles/master/.scripts/package-list.csv
-DOTFILES_INSTALL_SCRIPT=https://raw.githubusercontent.com/rtogo/.dotfiles/master/.scripts/dotfiles-install
+PACKAGE_LIST=https://raw.githubusercontent.com/strafael/.dotfiles/master/.scripts/package-list.csv
+DOTFILES_INSTALL_SCRIPT=https://raw.githubusercontent.com/strafael/.dotfiles/master/.scripts/dotfiles-install
 
 # ---------
 # FUNCTIONS
