@@ -1,7 +1,4 @@
 # Toolbox binaries
-alias eza='podman exec -it --workdir "$(pwd)" arch-utils eza'
-alias nvim='podman exec -it --workdir "$(pwd)" arch-nvim nvim'
-
 alias vim='nvim'
 alias cp='cp -i'
 alias mv='mv -i'
