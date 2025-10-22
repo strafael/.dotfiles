@@ -1,7 +1,11 @@
 alias vim='nvim'
 alias cp='cp -i'
 alias mv='mv -i'
-alias rm='rm -i'
+alias rm='rm -Iv'
+alias cat='bat'
+alias grep='grep --color=auto'
+alias df='df -h'
+alias du='du -h -d 1'
 
 alias l="eza --icons=always"
 alias ls="eza --icons=always"
