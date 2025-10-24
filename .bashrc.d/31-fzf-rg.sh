@@ -31,12 +31,7 @@ sp() {
   local query="$*"
   local preview sel file line
 
-  # Preview with bat
-  if command -v bat >/dev/null 2>&1; then
-    preview='bat --style=numbers --color=always --highlight-line {2} {1} 2>/dev/null || sed -n "1,200p" {1}'
-  else
-    preview='sed -n "1,200p" {1}'
-  fi
+  preview='line={2}; start=$((line - 5)); if [ "$start" -lt 1 ]; then start=1; fi; end=$((line + 5)); bat --style=numbers --color=always --highlight-line "$line" --line-range "$start:$end" {1} 2>/dev/null || sed -n "${start},${end}p" {1}'
 
   sel="$(
     rg --line-number --no-heading --color=always -S \
@@ -46,7 +41,6 @@ sp() {
       --layout=reverse --height=40% --border
     )" || return
 
-    # Safe parser to support names with space
     IFS=: read -r file line _ <<<"$sel"
     [ -n "$file" ] || return
     "${EDITOR:-nvim}" +"${line:-1}" -- "$file"
