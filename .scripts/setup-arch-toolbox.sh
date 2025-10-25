@@ -2,8 +2,11 @@
 sudo pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay-bin.git && cd yay-bin && makepkg -si
 cd ~
 
+# Update system
+yay -Syu --noconfirm
+
 # Install common apps
-yay -S \
+yay -Sy --noconfirm \
 	neovim-nightly-build \
 	ripgrep \
 	tldr \
