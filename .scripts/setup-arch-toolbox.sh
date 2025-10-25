@@ -15,5 +15,7 @@ yay -Sy --noconfirm \
 	fzf \
 	btop \
 	bat \
-	aria2
+	aria2 \
+	tmux \
+	starship
 
